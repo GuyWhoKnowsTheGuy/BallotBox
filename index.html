@@ -1,0 +1,1878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Governor 2026 — Campaign CIO Command Center</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy: #0d1b2a;
+  --navy-2: #162236;
+  --navy-3: #1e3048;
+  --gold: #c8973f;
+  --gold-2: #e2b865;
+  --gold-pale: rgba(200,151,63,0.12);
+  --cream: #f6f2ea;
+  --cream-2: #ede8dc;
+  --text: #0d1b2a;
+  --text-2: #4a6080;
+  --text-3: #8aa0b8;
+  --border: rgba(13,27,42,0.1);
+  --border-2: rgba(13,27,42,0.06);
+  --white: #ffffff;
+  --success: #1e6641;
+  --success-bg: #e8f5ee;
+  --warning: #7a4f00;
+  --warning-bg: #fff4d6;
+  --danger: #8b1a1a;
+  --danger-bg: #fdeaea;
+  --info: #0f4c81;
+  --info-bg: #e6f0fa;
+  --sidebar-w: 230px;
+  --topbar-h: 56px;
+  --radius: 8px;
+  --radius-lg: 12px;
+}
+
+html, body { height: 100%; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ── LAYOUT ── */
+.app { display: flex; height: 100vh; overflow: hidden; }
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: var(--sidebar-w);
+  min-width: var(--sidebar-w);
+  background: var(--navy);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.sidebar-logo {
+  padding: 22px 20px 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+
+.logo-eyebrow {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 5px;
+}
+
+.logo-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px;
+  font-weight: 500;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.logo-sub {
+  font-size: 10px;
+  color: rgba(255,255,255,0.38);
+  margin-top: 3px;
+  letter-spacing: 0.02em;
+}
+
+.nav-group { padding: 14px 12px 4px; }
+
+.nav-group-label {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.28);
+  padding: 0 8px;
+  margin-bottom: 5px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 10px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 13px;
+  color: rgba(255,255,255,0.55);
+  transition: background 0.13s, color 0.13s;
+  margin-bottom: 1px;
+  user-select: none;
+  position: relative;
+}
+
+.nav-item:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.85); }
+
+.nav-item.active {
+  background: var(--gold-pale);
+  color: var(--gold-2);
+  border: 1px solid rgba(200,151,63,0.2);
+}
+
+.nav-icon { font-size: 13px; width: 16px; text-align: center; flex-shrink: 0; }
+
+.nav-badge {
+  margin-left: auto;
+  background: rgba(200,151,63,0.25);
+  color: var(--gold-2);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 7px;
+  border-radius: 20px;
+  font-family: 'DM Mono', monospace;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 14px 12px;
+  border-top: 1px solid rgba(255,255,255,0.07);
+}
+
+.sidebar-footer-label {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.28);
+  padding: 0 4px;
+  margin-bottom: 8px;
+}
+
+.integration-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.45);
+  border: 1px solid rgba(255,255,255,0.08);
+  margin-bottom: 4px;
+  cursor: default;
+}
+
+.integration-pill .dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: #5cb85c;
+  margin-left: auto;
+  box-shadow: 0 0 4px rgba(92,184,92,0.5);
+}
+
+.integration-pill .dot.off { background: rgba(255,255,255,0.2); box-shadow: none; }
+
+.storage-pill {
+  margin-top: 10px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 10px;
+  color: rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.04);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ── MAIN ── */
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+
+/* ── TOPBAR ── */
+.topbar {
+  height: var(--topbar-h);
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 16px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 10;
+}
+
+.topbar-titles { flex: 1; min-width: 0; }
+.topbar-page { font-size: 14px; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.topbar-sub { font-size: 11px; color: var(--text-3); }
+
+.topbar-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 6px 14px;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.13s;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.btn-primary { background: var(--navy); color: white; border-color: var(--navy); }
+.btn-primary:hover { background: var(--navy-2); }
+.btn-gold { background: var(--gold); color: var(--navy); border-color: var(--gold); font-weight: 600; }
+.btn-gold:hover { background: var(--gold-2); border-color: var(--gold-2); }
+.btn-outline { background: transparent; color: var(--text-2); border-color: var(--border); }
+.btn-outline:hover { border-color: var(--navy); color: var(--text); }
+.btn-ghost { background: transparent; color: var(--text-2); border: none; padding: 6px 10px; }
+.btn-ghost:hover { color: var(--text); background: var(--cream); border-radius: 6px; }
+.btn-danger { background: var(--danger-bg); color: var(--danger); border-color: rgba(139,26,26,0.2); }
+.btn-danger:hover { background: #f5c0c0; }
+.btn-sm { padding: 4px 10px; font-size: 11px; border-radius: 5px; }
+
+/* ── CONTENT ── */
+.content { flex: 1; overflow-y: auto; padding: 24px; background: var(--cream); }
+
+/* ── SECTIONS ── */
+.section { display: none; }
+.section.active { display: block; animation: fadeIn 0.18s ease; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+/* ── PAGE HEADER ── */
+.page-header {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.page-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 500; color: var(--navy); }
+.page-desc { font-size: 12px; color: var(--text-3); margin-top: 3px; }
+.page-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+
+/* ── KPI GRID ── */
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 22px; }
+
+.kpi-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px 18px 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.kpi-card::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  background: var(--gold);
+}
+
+.kpi-label { font-size: 10px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-3); margin-bottom: 7px; }
+.kpi-value { font-family: 'DM Mono', monospace; font-size: 28px; font-weight: 500; color: var(--navy); line-height: 1; }
+.kpi-trend { font-size: 11px; color: var(--success); margin-top: 5px; }
+.kpi-trend.down { color: var(--danger); }
+.kpi-trend.neutral { color: var(--text-3); }
+
+/* ── TWO-COL GRID ── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+
+/* ── CARD ── */
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+}
+
+.card-title {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-2);
+  margin-bottom: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-link { font-size: 11px; color: var(--gold); cursor: pointer; font-weight: 500; text-transform: none; letter-spacing: 0; }
+.card-link:hover { color: var(--gold-2); }
+
+/* ── TABLE ── */
+.tbl-wrap { overflow-x: auto; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+thead th {
+  text-align: left;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  background: var(--cream-2);
+}
+
+tbody td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-2);
+  color: var(--text);
+  vertical-align: middle;
+}
+
+tbody tr:last-child td { border-bottom: none; }
+
+tbody tr:hover td { background: var(--cream); }
+
+td strong { font-weight: 500; color: var(--navy); }
+
+/* ── BADGES ── */
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.badge-success { background: var(--success-bg); color: var(--success); }
+.badge-warning { background: var(--warning-bg); color: var(--warning); }
+.badge-danger { background: var(--danger-bg); color: var(--danger); }
+.badge-info { background: var(--info-bg); color: var(--info); }
+.badge-neutral { background: var(--cream-2); color: var(--text-2); }
+.badge-gold { background: var(--gold-pale); color: var(--gold); border: 1px solid rgba(200,151,63,0.3); }
+
+/* ── PROGRESS ── */
+.prog { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.prog-fill { height: 100%; border-radius: 3px; background: var(--gold); transition: width 0.4s ease; }
+.prog.thin { height: 4px; }
+.prog-label { font-size: 11px; color: var(--text-3); margin-top: 4px; }
+
+/* ── PIPELINE ── */
+.pipeline { display: flex; gap: 10px; margin-bottom: 16px; }
+
+.stage-box {
+  flex: 1;
+  background: var(--cream-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.13s;
+}
+
+.stage-box:hover { border-color: var(--gold); }
+.stage-box.active { background: var(--gold-pale); border-color: rgba(200,151,63,0.4); }
+
+.stage-n { font-family: 'DM Mono', monospace; font-size: 22px; font-weight: 500; color: var(--navy); }
+.stage-l { font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); margin-top: 1px; }
+.stage-amt { font-size: 11px; color: var(--gold); font-weight: 500; margin-top: 3px; }
+
+/* ── VOLUNTEER ITEM ── */
+.person-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--border-2);
+  border-radius: 8px;
+  background: var(--cream);
+  margin-bottom: 6px;
+}
+
+.avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: var(--navy-3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 600; color: var(--gold-2);
+  flex-shrink: 0;
+  font-family: 'DM Mono', monospace;
+}
+
+.person-name { font-size: 13px; font-weight: 500; color: var(--navy); }
+.person-role { font-size: 11px; color: var(--text-3); }
+.person-meta { margin-left: auto; text-align: right; }
+
+/* ── REGION BARS ── */
+.region-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.region-name { font-size: 12px; color: var(--text); width: 140px; flex-shrink: 0; }
+.region-track { flex: 1; height: 7px; background: var(--border); border-radius: 4px; overflow: hidden; }
+.region-fill { height: 100%; border-radius: 4px; background: var(--navy); }
+.region-pct { font-size: 11px; color: var(--text-3); width: 34px; text-align: right; flex-shrink: 0; font-family: 'DM Mono', monospace; }
+
+/* ── ACTIVITY ── */
+.activity-item { display: flex; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border-2); }
+.activity-item:last-child { border-bottom: none; }
+.activity-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); margin-top: 5px; flex-shrink: 0; }
+.activity-text { font-size: 12px; color: var(--text); line-height: 1.5; }
+.activity-time { font-size: 10px; color: var(--text-3); margin-top: 2px; }
+
+/* ── MEDIA ITEM ── */
+.media-card {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--white);
+  margin-bottom: 8px;
+  transition: border-color 0.13s;
+}
+
+.media-card:hover { border-color: var(--gold); }
+.media-card.alert { border-color: rgba(122,79,0,0.3); background: var(--warning-bg); }
+
+.media-icon {
+  width: 38px; height: 38px; border-radius: 8px;
+  background: var(--info-bg);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; flex-shrink: 0;
+}
+
+.media-headline { font-size: 13px; font-weight: 500; color: var(--navy); line-height: 1.4; }
+.media-outlet { font-size: 11px; color: var(--text-3); margin-top: 2px; }
+.media-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px; }
+.media-actions { margin-left: auto; display: flex; gap: 6px; align-items: flex-start; flex-shrink: 0; }
+
+/* ── TABS ── */
+.tabs { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 18px; }
+.tab { padding: 8px 16px; font-size: 12px; font-weight: 500; color: var(--text-3); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.13s; white-space: nowrap; }
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--navy); border-bottom-color: var(--gold); }
+
+/* ── SEARCH BAR ── */
+.search-row { display: flex; gap: 8px; margin-bottom: 16px; }
+.search-input {
+  flex: 1; padding: 8px 12px;
+  border: 1px solid var(--border); border-radius: 7px;
+  font-size: 13px; font-family: 'DM Sans', sans-serif;
+  color: var(--text); background: var(--white); outline: none;
+  transition: border-color 0.13s;
+}
+.search-input:focus { border-color: var(--navy); }
+
+/* ── FORMS ── */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-grid.single { grid-template-columns: 1fr; }
+.form-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
+.form-label { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); }
+.form-control {
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+  background: var(--white);
+  outline: none;
+  transition: border-color 0.13s;
+  width: 100%;
+}
+.form-control:focus { border-color: var(--navy); }
+select.form-control { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238aa0b8'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px; }
+textarea.form-control { resize: vertical; min-height: 72px; }
+
+/* ── MODAL ── */
+.modal-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(13,27,42,0.45);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-overlay.open { display: flex; }
+
+.modal {
+  background: var(--white);
+  border-radius: 14px;
+  padding: 26px;
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(13,27,42,0.2);
+}
+
+.modal-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; }
+.modal-title { font-family: 'Playfair Display', serif; font-size: 19px; font-weight: 500; color: var(--navy); }
+.modal-close { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text-3); padding: 0; line-height: 1; }
+.modal-close:hover { color: var(--text); }
+
+.modal-footer { display: flex; gap: 8px; justify-content: flex-end; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border); }
+
+/* ── STAT BOXES ── */
+.stat-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 20px; }
+.stat-box { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; }
+.stat-n { font-family: 'DM Mono', monospace; font-size: 24px; font-weight: 500; color: var(--navy); }
+.stat-l { font-size: 11px; color: var(--text-3); margin-top: 2px; }
+
+/* ── TOAST ── */
+#toast {
+  position: fixed; bottom: 24px; right: 24px;
+  background: var(--navy); color: white;
+  padding: 10px 18px; border-radius: 8px;
+  font-size: 13px;
+  z-index: 9999;
+  opacity: 0; transform: translateY(8px);
+  transition: all 0.2s;
+  pointer-events: none;
+}
+#toast.show { opacity: 1; transform: none; }
+
+/* ── EMPTY STATE ── */
+.empty-state {
+  text-align: center; padding: 40px 20px; color: var(--text-3);
+}
+.empty-state h3 { font-size: 15px; color: var(--text-2); margin-bottom: 6px; }
+.empty-state p { font-size: 12px; }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .kpi-grid { grid-template-columns: repeat(2,1fr); }
+  .two-col { grid-template-columns: 1fr; }
+  .three-col { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 640px) {
+  :root { --sidebar-w: 0px; }
+  .sidebar { display: none; }
+  .three-col { grid-template-columns: 1fr; }
+  .stat-row { grid-template-columns: 1fr 1fr; }
+  .form-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-eyebrow">CIO Command Center</div>
+      <div class="logo-name" id="candidate-name">Governor 2026</div>
+      <div class="logo-sub">Campaign Data Platform</div>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">Overview</div>
+      <div class="nav-item active" data-section="dashboard">
+        <span class="nav-icon">⊞</span> Dashboard
+      </div>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">Data Domains</div>
+      <div class="nav-item" data-section="donors">
+        <span class="nav-icon">◈</span> Donors &amp; Fundraising
+        <span class="nav-badge" id="badge-donors">0</span>
+      </div>
+      <div class="nav-item" data-section="volunteers">
+        <span class="nav-icon">◎</span> Volunteers &amp; Staff
+        <span class="nav-badge" id="badge-volunteers">0</span>
+      </div>
+      <div class="nav-item" data-section="voters">
+        <span class="nav-icon">◉</span> Voter Outreach
+        <span class="nav-badge" id="badge-voters">0</span>
+      </div>
+      <div class="nav-item" data-section="media">
+        <span class="nav-icon">▣</span> Media &amp; Comms
+        <span class="nav-badge" id="badge-media">0</span>
+      </div>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">Operations</div>
+      <div class="nav-item" data-section="events">
+        <span class="nav-icon">◷</span> Events
+        <span class="nav-badge" id="badge-events">0</span>
+      </div>
+      <div class="nav-item" data-section="settings">
+        <span class="nav-icon">⚙</span> Settings
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-label">Integrations (v2)</div>
+      <div class="integration-pill"><span>📁</span> Google Drive <div class="dot off"></div></div>
+      <div class="integration-pill"><span>📧</span> Gmail <div class="dot off"></div></div>
+      <div class="integration-pill"><span>📅</span> Calendar <div class="dot off"></div></div>
+      <div class="storage-pill">💾 localStorage · prototype mode</div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div class="topbar-titles">
+        <div class="topbar-page" id="topbar-title">Executive Dashboard</div>
+        <div class="topbar-sub" id="topbar-sub">Live campaign overview</div>
+      </div>
+      <div class="topbar-actions">
+        <button class="btn btn-outline" onclick="openModal('quick-add')">+ Add Record</button>
+        <button class="btn btn-gold" onclick="exportData()">Export CSV</button>
+      </div>
+    </header>
+
+    <!-- CONTENT -->
+    <main class="content">
+
+      <!-- ══ DASHBOARD ══ -->
+      <div class="section active" id="section-dashboard">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Executive Dashboard</div>
+            <div class="page-desc">Real-time campaign data summary</div>
+          </div>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">Total Raised</div>
+            <div class="kpi-value" id="kpi-raised">$0</div>
+            <div class="kpi-trend neutral" id="kpi-donors-count">0 donors on record</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Active Volunteers</div>
+            <div class="kpi-value" id="kpi-volunteers">0</div>
+            <div class="kpi-trend neutral" id="kpi-vol-sub">people on roster</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Doors Knocked</div>
+            <div class="kpi-value" id="kpi-doors">0</div>
+            <div class="kpi-trend neutral" id="kpi-doors-sub">across all regions</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Press Items</div>
+            <div class="kpi-value" id="kpi-press">0</div>
+            <div class="kpi-trend neutral" id="kpi-press-sub">tracked in media log</div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <div class="card-title">Donor Pipeline <span class="card-link" onclick="navigate('donors')">View all →</span></div>
+            <div class="pipeline" id="dash-pipeline">
+              <div class="stage-box"><div class="stage-n" id="stage-prospect">0</div><div class="stage-l">Prospect</div><div class="stage-amt" id="stage-prospect-amt">$0</div></div>
+              <div class="stage-box"><div class="stage-n" id="stage-cultivating">0</div><div class="stage-l">Cultivating</div><div class="stage-amt" id="stage-cultivating-amt">$0</div></div>
+              <div class="stage-box"><div class="stage-n" id="stage-ask">0</div><div class="stage-l">Ask Made</div><div class="stage-amt" id="stage-ask-amt">$0</div></div>
+              <div class="stage-box active"><div class="stage-n" id="stage-closed">0</div><div class="stage-l">Closed</div><div class="stage-amt" id="stage-closed-amt">$0</div></div>
+            </div>
+            <div id="dash-recent-donors"><div class="empty-state"><p>No donors yet. <span class="card-link" onclick="navigate('donors')">Add your first donor →</span></p></div></div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Team Overview <span class="card-link" onclick="navigate('volunteers')">View all →</span></div>
+            <div id="dash-team"><div class="empty-state"><p>No staff or volunteers yet. <span class="card-link" onclick="navigate('volunteers')">Add someone →</span></p></div></div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <div class="card-title">Voter Outreach by Region <span class="card-link" onclick="navigate('voters')">View all →</span></div>
+            <div id="dash-regions"><div class="empty-state"><p>No outreach logged yet. <span class="card-link" onclick="navigate('voters')">Log activity →</span></p></div></div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Recent Activity</div>
+            <div id="dash-activity"><div class="empty-state"><p>Activity will appear here as you add records.</p></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ DONORS ══ -->
+      <div class="section" id="section-donors">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Donors &amp; Fundraising</div>
+            <div class="page-desc">Manage your full donor pipeline</div>
+          </div>
+          <div class="page-actions">
+            <button class="btn btn-outline" onclick="openModal('import-donors')">Import CSV</button>
+            <button class="btn btn-gold" onclick="openModal('add-donor')">+ Add Donor</button>
+          </div>
+        </div>
+
+        <div class="stat-row">
+          <div class="stat-box"><div class="stat-n" id="d-total-raised">$0</div><div class="stat-l">Total raised</div></div>
+          <div class="stat-box"><div class="stat-n" id="d-total-donors">0</div><div class="stat-l">Total donors</div></div>
+          <div class="stat-box"><div class="stat-n" id="d-avg-gift">$0</div><div class="stat-l">Avg gift</div></div>
+        </div>
+
+        <div class="prog" style="margin-bottom:6px"><div class="prog-fill" id="donor-prog" style="width:0%"></div></div>
+        <div class="prog-label" id="donor-prog-label">Set a fundraising goal in Settings</div>
+
+        <div class="tabs">
+          <div class="tab active" data-tab="donors" data-filter="all">All Donors</div>
+          <div class="tab" data-tab="donors" data-filter="Prospect">Prospects</div>
+          <div class="tab" data-tab="donors" data-filter="Cultivating">Cultivating</div>
+          <div class="tab" data-tab="donors" data-filter="Ask Made">Ask Made</div>
+          <div class="tab" data-tab="donors" data-filter="Closed">Closed</div>
+        </div>
+
+        <div class="search-row">
+          <input class="search-input" id="donor-search" placeholder="Search by name, stage, owner…" oninput="renderDonors()">
+          <button class="btn btn-outline btn-sm" onclick="exportSection('donors')">Export CSV</button>
+        </div>
+
+        <div class="card" style="padding:0;overflow:hidden">
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Name</th><th>Stage</th><th>Amount</th><th>Type</th><th>Last Contact</th><th>Owner</th><th>Notes</th><th></th></tr></thead>
+              <tbody id="donors-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ VOLUNTEERS ══ -->
+      <div class="section" id="section-volunteers">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Volunteers &amp; Staff</div>
+            <div class="page-desc">Roster, roles, and field team management</div>
+          </div>
+          <div class="page-actions">
+            <button class="btn btn-gold" onclick="openModal('add-volunteer')">+ Add Person</button>
+          </div>
+        </div>
+
+        <div class="stat-row">
+          <div class="stat-box"><div class="stat-n" id="v-total">0</div><div class="stat-l">Total people</div></div>
+          <div class="stat-box"><div class="stat-n" id="v-paid">0</div><div class="stat-l">Paid staff</div></div>
+          <div class="stat-box"><div class="stat-n" id="v-vol">0</div><div class="stat-l">Volunteers</div></div>
+        </div>
+
+        <div class="tabs">
+          <div class="tab active" data-tab="volunteers" data-filter="all">All</div>
+          <div class="tab" data-tab="volunteers" data-filter="Paid Staff">Paid Staff</div>
+          <div class="tab" data-tab="volunteers" data-filter="Volunteer">Volunteers</div>
+        </div>
+
+        <div class="search-row">
+          <input class="search-input" id="vol-search" placeholder="Search by name, role, district…" oninput="renderVolunteers()">
+          <button class="btn btn-outline btn-sm" onclick="exportSection('volunteers')">Export CSV</button>
+        </div>
+
+        <div class="card" style="padding:0;overflow:hidden">
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Name</th><th>Role</th><th>Type</th><th>District</th><th>Availability</th><th>Skills</th><th>Status</th><th></th></tr></thead>
+              <tbody id="volunteers-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ VOTERS ══ -->
+      <div class="section" id="section-voters">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Voter Outreach &amp; Canvassing</div>
+            <div class="page-desc">Track canvass logs and contact coverage by region</div>
+          </div>
+          <div class="page-actions">
+            <button class="btn btn-gold" onclick="openModal('add-voter')">+ Log Outreach</button>
+          </div>
+        </div>
+
+        <div class="stat-row">
+          <div class="stat-box"><div class="stat-n" id="vt-doors">0</div><div class="stat-l">Doors knocked</div></div>
+          <div class="stat-box"><div class="stat-n" id="vt-contacts">0</div><div class="stat-l">Contacts made</div></div>
+          <div class="stat-box"><div class="stat-n" id="vt-logs">0</div><div class="stat-l">Outreach logs</div></div>
+        </div>
+
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-title">Coverage by Region</div>
+          <div id="region-bars"><div class="empty-state"><p>No outreach logged yet.</p></div></div>
+        </div>
+
+        <div class="card" style="padding:0;overflow:hidden">
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Date</th><th>Type</th><th>Region</th><th>Lead</th><th>Attempts</th><th>Contacts</th><th>Notes</th><th></th></tr></thead>
+              <tbody id="voters-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ MEDIA ══ -->
+      <div class="section" id="section-media">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Media &amp; Communications</div>
+            <div class="page-desc">Press log, inquiries, and coverage tracking</div>
+          </div>
+          <div class="page-actions">
+            <button class="btn btn-gold" onclick="openModal('add-media')">+ Log Coverage</button>
+          </div>
+        </div>
+
+        <div class="stat-row">
+          <div class="stat-box"><div class="stat-n" id="m-total">0</div><div class="stat-l">Total items</div></div>
+          <div class="stat-box"><div class="stat-n" id="m-positive">0</div><div class="stat-l">Positive</div></div>
+          <div class="stat-box"><div class="stat-n" id="m-open">0</div><div class="stat-l">Open inquiries</div></div>
+        </div>
+
+        <div class="tabs">
+          <div class="tab active" data-tab="media" data-filter="all">All Coverage</div>
+          <div class="tab" data-tab="media" data-filter="Positive">Positive</div>
+          <div class="tab" data-tab="media" data-filter="Neutral">Neutral</div>
+          <div class="tab" data-tab="media" data-filter="Negative">Negative</div>
+          <div class="tab" data-tab="media" data-filter="Inquiry">Inquiries</div>
+        </div>
+
+        <div id="media-list"><div class="empty-state"><h3>No media items yet</h3><p>Log your first press mention or inquiry.</p></div></div>
+      </div>
+
+      <!-- ══ EVENTS ══ -->
+      <div class="section" id="section-events">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Events</div>
+            <div class="page-desc">Rallies, fundraisers, canvass days, and appearances</div>
+          </div>
+          <div class="page-actions">
+            <button class="btn btn-gold" onclick="openModal('add-event')">+ Add Event</button>
+          </div>
+        </div>
+
+        <div class="card" style="padding:0;overflow:hidden">
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Event</th><th>Date</th><th>Location</th><th>Type</th><th>Status</th><th>Notes</th><th></th></tr></thead>
+              <tbody id="events-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ SETTINGS ══ -->
+      <div class="section" id="section-settings">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Settings</div>
+            <div class="page-desc">Customize your campaign data</div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <div class="card-title">Campaign Info</div>
+            <div class="form-group"><div class="form-label">Candidate Name / Campaign Title</div><input class="form-control" id="set-candidate" placeholder="e.g. Jane Smith for Governor 2026"></div>
+            <div class="form-group"><div class="form-label">State</div><input class="form-control" id="set-state" placeholder="e.g. Illinois"></div>
+            <div class="form-group"><div class="form-label">Fundraising Goal ($)</div><input class="form-control" type="number" id="set-goal" placeholder="e.g. 1200000"></div>
+            <div class="form-group"><div class="form-label">Election Date</div><input class="form-control" type="date" id="set-election"></div>
+            <button class="btn btn-gold" onclick="saveSettings()">Save Settings</button>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Data Management</div>
+            <p style="font-size:12px;color:var(--text-3);margin-bottom:14px">All data is stored in your browser's localStorage. Export regularly for backup.</p>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <button class="btn btn-outline" onclick="exportData()">Export All Data (CSV)</button>
+              <button class="btn btn-outline" onclick="exportJSON()">Export All Data (JSON)</button>
+              <button class="btn btn-outline" onclick="importJSON()">Import JSON Backup</button>
+              <input type="file" id="import-file" accept=".json" style="display:none" onchange="handleImport(event)">
+              <button class="btn btn-danger" onclick="confirmClear()">Clear All Data</button>
+            </div>
+            <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border)">
+              <div style="font-size:11px;color:var(--text-3)">Storage used: <span id="storage-used">—</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- ══ MODALS ══ -->
+
+<!-- Quick Add -->
+<div class="modal-overlay" id="modal-quick-add">
+  <div class="modal" style="max-width:400px">
+    <div class="modal-header">
+      <div class="modal-title">Add Record</div>
+      <button class="modal-close" onclick="closeModal('quick-add')">×</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <button class="btn btn-outline" style="padding:20px;flex-direction:column;height:auto;gap:6px" onclick="closeModal('quick-add');openModal('add-donor')"><span style="font-size:20px">◈</span><span>Donor</span></button>
+      <button class="btn btn-outline" style="padding:20px;flex-direction:column;height:auto;gap:6px" onclick="closeModal('quick-add');openModal('add-volunteer')"><span style="font-size:20px">◎</span><span>Volunteer / Staff</span></button>
+      <button class="btn btn-outline" style="padding:20px;flex-direction:column;height:auto;gap:6px" onclick="closeModal('quick-add');openModal('add-voter')"><span style="font-size:20px">◉</span><span>Outreach Log</span></button>
+      <button class="btn btn-outline" style="padding:20px;flex-direction:column;height:auto;gap:6px" onclick="closeModal('quick-add');openModal('add-media')"><span style="font-size:20px">▣</span><span>Press / Media</span></button>
+      <button class="btn btn-outline" style="padding:20px;flex-direction:column;height:auto;gap:6px;grid-column:1/-1" onclick="closeModal('quick-add');openModal('add-event')"><span style="font-size:20px">◷</span><span>Event</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Donor -->
+<div class="modal-overlay" id="modal-add-donor">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="donor-modal-title">Add Donor</div>
+      <button class="modal-close" onclick="closeModal('add-donor')">×</button>
+    </div>
+    <input type="hidden" id="donor-edit-id">
+    <div class="form-grid">
+      <div class="form-group"><div class="form-label">First Name *</div><input class="form-control" id="d-fname" placeholder="First"></div>
+      <div class="form-group"><div class="form-label">Last Name *</div><input class="form-control" id="d-lname" placeholder="Last"></div>
+      <div class="form-group"><div class="form-label">Email</div><input class="form-control" id="d-email" type="email" placeholder="email@example.com"></div>
+      <div class="form-group"><div class="form-label">Phone</div><input class="form-control" id="d-phone" placeholder="(555) 000-0000"></div>
+      <div class="form-group"><div class="form-label">Stage *</div>
+        <select class="form-control" id="d-stage">
+          <option>Prospect</option><option>Cultivating</option><option>Ask Made</option><option>Closed</option>
+        </select>
+      </div>
+      <div class="form-group"><div class="form-label">Amount ($) *</div><input class="form-control" id="d-amount" type="number" placeholder="0"></div>
+      <div class="form-group"><div class="form-label">Donor Type</div>
+        <select class="form-control" id="d-type">
+          <option>Major</option><option>Mid-level</option><option>Small dollar</option><option>Recurring</option>
+        </select>
+      </div>
+      <div class="form-group"><div class="form-label">Owner</div><input class="form-control" id="d-owner" placeholder="Staff member name"></div>
+      <div class="form-group"><div class="form-label">Last Contact</div><input class="form-control" id="d-contact" type="date"></div>
+      <div class="form-group"><div class="form-label">Employer</div><input class="form-control" id="d-employer" placeholder="Organization"></div>
+    </div>
+    <div class="form-group"><div class="form-label">Notes</div><textarea class="form-control" id="d-notes" placeholder="Relationship notes, referral source, next steps…"></textarea></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('add-donor')">Cancel</button>
+      <button class="btn btn-gold" onclick="saveDonor()">Save Donor</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Volunteer -->
+<div class="modal-overlay" id="modal-add-volunteer">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="vol-modal-title">Add Volunteer / Staff</div>
+      <button class="modal-close" onclick="closeModal('add-volunteer')">×</button>
+    </div>
+    <input type="hidden" id="vol-edit-id">
+    <div class="form-grid">
+      <div class="form-group"><div class="form-label">First Name *</div><input class="form-control" id="v-fname" placeholder="First"></div>
+      <div class="form-group"><div class="form-label">Last Name *</div><input class="form-control" id="v-lname" placeholder="Last"></div>
+      <div class="form-group"><div class="form-label">Role / Title *</div><input class="form-control" id="v-role" placeholder="e.g. Canvass Lead"></div>
+      <div class="form-group"><div class="form-label">Type</div>
+        <select class="form-control" id="v-type">
+          <option>Volunteer</option><option>Paid Staff</option><option>Intern</option><option>Contractor</option>
+        </select>
+      </div>
+      <div class="form-group"><div class="form-label">District / Region</div><input class="form-control" id="v-district" placeholder="e.g. NW District"></div>
+      <div class="form-group"><div class="form-label">Availability</div>
+        <select class="form-control" id="v-availability">
+          <option>Flexible</option><option>Weekdays</option><option>Weekends</option><option>Part-time</option>
+        </select>
+      </div>
+      <div class="form-group"><div class="form-label">Email</div><input class="form-control" id="v-email" type="email" placeholder="email@example.com"></div>
+      <div class="form-group"><div class="form-label">Phone</div><input class="form-control" id="v-phone" placeholder="(555) 000-0000"></div>
+    </div>
+    <div class="form-group"><div class="form-label">Skills</div><input class="form-control" id="v-skills" placeholder="e.g. Canvassing, Spanish, Data entry, Phones"></div>
+    <div class="form-group"><div class="form-label">Status</div>
+      <select class="form-control" id="v-status">
+        <option>Active</option><option>Onboarding</option><option>On leave</option><option>Inactive</option>
+      </select>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('add-volunteer')">Cancel</button>
+      <button class="btn btn-gold" onclick="saveVolunteer()">Save Person</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Outreach -->
+<div class="modal-overlay" id="modal-add-voter">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="voter-modal-title">Log Outreach Activity</div>
+      <button class="modal-close" onclick="closeModal('add-voter')">×</button>
+    </div>
+    <input type="hidden" id="vt-edit-id">
+    <div class="form-grid">
+      <div class="form-group"><div class="form-label">Activity Type</div>
+        <select class="form-control" id="vt-type">
+          <option>Canvass</option><option>Phone Bank</option><option>Text Bank</option><option>Event</option><option>Digital</option>
+        </select>
+      </div>
+      <div class="form-group"><div class="form-label">Date *</div><input class="form-control" id="vt-date" type="date"></div>
+      <div class="form-group"><div class="form-label">Region *</div><input class="form-control" id="vt-region" placeholder="e.g. Northern Metro"></div>
+      <div class="form-group"><div class="form-label">Lead / Team</div><input class="form-control" id="vt-lead" placeholder="Staff or volunteer name"></div>
+      <div class="form-group"><div class="form-label">Doors / Attempts</div><input class="form-control" id="vt-attempts" type="number" placeholder="0" min="0"></div>
+      <div class="form-group"><div class="form-label">Contacts Made</div><input class="form-control" id="vt-contacts" type="number" placeholder="0" min="0"></div>
+    </div>
+    <div class="form-group"><div class="form-label">Notes</div><textarea class="form-control" id="vt-notes" placeholder="Observations, highlights, issues…"></textarea></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('add-voter')">Cancel</button>
+      <button class="btn btn-gold" onclick="saveVoter()">Save Log</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Media -->
+<div class="modal-overlay" id="modal-add-media">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="media-modal-title">Log Press Coverage</div>
+      <button class="modal-close" onclick="closeModal('add-media')">×</button>
+    </div>
+    <input type="hidden" id="me-edit-id">
+    <div class="form-group"><div class="form-label">Headline / Title *</div><input class="form-control" id="me-title" placeholder="Article or segment title"></div>
+    <div class="form-grid">
+      <div class="form-group"><div class="form-label">Outlet *</div><input class="form-control" id="me-outlet" placeholder="e.g. State Journal"></div>
+      <div class="form-group"><div class="form-label">Date</div><input class="form-control" id="me-date" type="date"></div>
+      <div class="form-group"><div class="form-label">Type</div>
+        <select class="form-control" id="me-type">
+          <option>Print / Online</option><option>TV</option><option>Radio</option><option>Podcast</option><option>Social</option><option>Inquiry</option>
+        </select>
+      </div>
+      <div class="form-group"><div class="form-label">Tone</div>
+        <select class="form-control" id="me-tone">
+          <option>Positive</option><option>Neutral</option><option>Mixed</option><option>Negative</option><option>Inquiry</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><div class="form-label">Topic Tags</div><input class="form-control" id="me-tags" placeholder="e.g. Infrastructure, Education, Budget"></div>
+    <div class="form-group"><div class="form-label">URL / Link</div><input class="form-control" id="me-url" type="url" placeholder="https://…"></div>
+    <div class="form-group"><div class="form-label">Notes</div><textarea class="form-control" id="me-notes" placeholder="Summary, response needed, key quotes…"></textarea></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('add-media')">Cancel</button>
+      <button class="btn btn-gold" onclick="saveMedia()">Save Coverage</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Event -->
+<div class="modal-overlay" id="modal-add-event">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="event-modal-title">Add Event</div>
+      <button class="modal-close" onclick="closeModal('add-event')">×</button>
+    </div>
+    <input type="hidden" id="ev-edit-id">
+    <div class="form-group"><div class="form-label">Event Name *</div><input class="form-control" id="ev-name" placeholder="e.g. Spring Donor Reception"></div>
+    <div class="form-grid">
+      <div class="form-group"><div class="form-label">Date *</div><input class="form-control" id="ev-date" type="date"></div>
+      <div class="form-group"><div class="form-label">Time</div><input class="form-control" id="ev-time" type="time"></div>
+      <div class="form-group"><div class="form-label">Type</div>
+        <select class="form-control" id="ev-type">
+          <option>Fundraiser</option><option>Rally</option><option>Town Hall</option><option>Canvass Day</option><option>Media</option><option>Internal</option><option>Other</option>
+        </select>
+      </div>
+      <div class="form-group"><div class="form-label">Status</div>
+        <select class="form-control" id="ev-status">
+          <option>Tentative</option><option>Confirmed</option><option>Planning</option><option>Completed</option><option>Cancelled</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><div class="form-label">Location</div><input class="form-control" id="ev-location" placeholder="Venue or address"></div>
+    <div class="form-group"><div class="form-label">Notes</div><textarea class="form-control" id="ev-notes" placeholder="Details, logistics, attendee targets…"></textarea></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('add-event')">Cancel</button>
+      <button class="btn btn-gold" onclick="saveEvent()">Save Event</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+const KEYS = { donors:'cio_donors', volunteers:'cio_volunteers', voters:'cio_voters', media:'cio_media', events:'cio_events', settings:'cio_settings', activity:'cio_activity' };
+
+let state = {
+  donors: [], volunteers: [], voters: [], media: [], events: [],
+  settings: { candidateName:'Governor 2026', state:'', goal:0, electionDate:'' },
+  activity: []
+};
+
+let currentDonorFilter = 'all';
+let currentVolFilter = 'all';
+let currentMediaFilter = 'all';
+
+function load() {
+  Object.keys(KEYS).forEach(k => {
+    try {
+      const raw = localStorage.getItem(KEYS[k]);
+      if (raw) state[k] = JSON.parse(raw);
+    } catch(e) {}
+  });
+}
+
+function save(key) {
+  localStorage.setItem(KEYS[key], JSON.stringify(state[key]));
+}
+
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+
+function logActivity(text, domain) {
+  state.activity.unshift({ text, domain, time: new Date().toISOString() });
+  if (state.activity.length > 50) state.activity = state.activity.slice(0,50);
+  save('activity');
+}
+
+// ══════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════
+const PAGE_META = {
+  dashboard: ['Executive Dashboard', 'Live campaign overview'],
+  donors: ['Donors & Fundraising', 'Full donor pipeline and fundraising tracker'],
+  volunteers: ['Volunteers & Staff', 'Roster, roles, and field team management'],
+  voters: ['Voter Outreach & Canvassing', 'Regional coverage and contact tracking'],
+  media: ['Media & Communications', 'Press tracker and coverage log'],
+  events: ['Events', 'Rallies, fundraisers, and campaign appearances'],
+  settings: ['Settings', 'Campaign configuration and data management']
+};
+
+function navigate(section) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('section-' + section).classList.add('active');
+  document.querySelector(`.nav-item[data-section="${section}"]`).classList.add('active');
+  const [title, sub] = PAGE_META[section] || ['', ''];
+  document.getElementById('topbar-title').textContent = title;
+  document.getElementById('topbar-sub').textContent = sub;
+  renderSection(section);
+}
+
+function renderSection(s) {
+  if (s === 'dashboard') renderDashboard();
+  if (s === 'donors') renderDonors();
+  if (s === 'volunteers') renderVolunteers();
+  if (s === 'voters') renderVoters();
+  if (s === 'media') renderMedia();
+  if (s === 'events') renderEvents();
+  if (s === 'settings') loadSettings();
+}
+
+// ══════════════════════════════════════════
+// BADGES
+// ══════════════════════════════════════════
+function updateBadges() {
+  document.getElementById('badge-donors').textContent = state.donors.length;
+  document.getElementById('badge-volunteers').textContent = state.volunteers.length;
+  document.getElementById('badge-voters').textContent = state.voters.length;
+  document.getElementById('badge-media').textContent = state.media.length;
+  document.getElementById('badge-events').textContent = state.events.length;
+}
+
+// ══════════════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════════════
+function renderDashboard() {
+  // KPIs
+  const totalRaised = state.donors.filter(d => d.stage === 'Closed').reduce((s,d) => s + (parseFloat(d.amount)||0), 0);
+  const totalDoors = state.voters.reduce((s,v) => s + (parseInt(v.attempts)||0), 0);
+  document.getElementById('kpi-raised').textContent = '$' + totalRaised.toLocaleString();
+  document.getElementById('kpi-donors-count').textContent = state.donors.length + ' donors on record';
+  document.getElementById('kpi-volunteers').textContent = state.volunteers.filter(v=>v.status==='Active').length;
+  document.getElementById('kpi-vol-sub').textContent = state.volunteers.length + ' people on roster';
+  document.getElementById('kpi-doors').textContent = totalDoors.toLocaleString();
+  document.getElementById('kpi-doors-sub').textContent = state.voters.length + ' outreach logs';
+  document.getElementById('kpi-press').textContent = state.media.length;
+
+  // Pipeline
+  ['prospect','cultivating','ask','closed'].forEach(k => {
+    const stageMap = {prospect:'Prospect',cultivating:'Cultivating',ask:'Ask Made',closed:'Closed'};
+    const filtered = state.donors.filter(d => d.stage === stageMap[k]);
+    const amt = filtered.reduce((s,d) => s + (parseFloat(d.amount)||0), 0);
+    document.getElementById('stage-' + k).textContent = filtered.length;
+    document.getElementById('stage-' + k + '-amt').textContent = '$' + amt.toLocaleString();
+  });
+
+  // Recent donors
+  const recentDonors = [...state.donors].sort((a,b) => b.createdAt - a.createdAt).slice(0,4);
+  const dt = document.getElementById('dash-recent-donors');
+  if (recentDonors.length === 0) {
+    dt.innerHTML = '<div class="empty-state"><p>No donors yet. <span class="card-link" onclick="navigate(\'donors\')">Add your first donor →</span></p></div>';
+  } else {
+    dt.innerHTML = '<table><thead><tr><th>Donor</th><th>Stage</th><th>Amount</th></tr></thead><tbody>' +
+      recentDonors.map(d => `<tr><td><strong>${d.firstName} ${d.lastName}</strong></td><td>${stageBadge(d.stage)}</td><td>$${(parseFloat(d.amount)||0).toLocaleString()}</td></tr>`).join('') +
+      '</tbody></table>';
+  }
+
+  // Team
+  const teamEl = document.getElementById('dash-team');
+  const top4 = state.volunteers.slice(0,4);
+  if (top4.length === 0) {
+    teamEl.innerHTML = '<div class="empty-state"><p>No staff or volunteers yet.</p></div>';
+  } else {
+    teamEl.innerHTML = top4.map(v => `
+      <div class="person-row">
+        <div class="avatar">${initials(v.firstName, v.lastName)}</div>
+        <div><div class="person-name">${v.firstName} ${v.lastName}</div><div class="person-role">${v.role} — ${v.district||'HQ'}</div></div>
+        <div class="person-meta">${statusBadge(v.status)}</div>
+      </div>`).join('');
+  }
+
+  // Regions
+  const regionEl = document.getElementById('dash-regions');
+  const regions = {};
+  state.voters.forEach(v => {
+    if (!regions[v.region]) regions[v.region] = {attempts:0,contacts:0};
+    regions[v.region].attempts += parseInt(v.attempts)||0;
+    regions[v.region].contacts += parseInt(v.contacts)||0;
+  });
+  const rkeys = Object.keys(regions);
+  if (rkeys.length === 0) {
+    regionEl.innerHTML = '<div class="empty-state"><p>No outreach logged yet.</p></div>';
+  } else {
+    const maxAttempts = Math.max(...rkeys.map(r => regions[r].attempts), 1);
+    regionEl.innerHTML = rkeys.map(r => {
+      const pct = Math.round((regions[r].attempts / maxAttempts) * 100);
+      return `<div class="region-row"><div class="region-name">${r}</div><div class="region-track"><div class="region-fill" style="width:${pct}%"></div></div><div class="region-pct">${regions[r].contacts.toLocaleString()}</div></div>`;
+    }).join('');
+  }
+
+  // Activity
+  const actEl = document.getElementById('dash-activity');
+  if (state.activity.length === 0) {
+    actEl.innerHTML = '<div class="empty-state"><p>Activity will appear here as you add records.</p></div>';
+  } else {
+    actEl.innerHTML = state.activity.slice(0,6).map(a => `
+      <div class="activity-item">
+        <div class="activity-dot"></div>
+        <div>
+          <div class="activity-text">${a.text}</div>
+          <div class="activity-time">${timeAgo(a.time)} · ${a.domain}</div>
+        </div>
+      </div>`).join('');
+  }
+}
+
+// ══════════════════════════════════════════
+// DONORS
+// ══════════════════════════════════════════
+function renderDonors() {
+  const q = (document.getElementById('donor-search')?.value || '').toLowerCase();
+  let donors = state.donors;
+  if (currentDonorFilter !== 'all') donors = donors.filter(d => d.stage === currentDonorFilter);
+  if (q) donors = donors.filter(d => `${d.firstName} ${d.lastName} ${d.stage} ${d.owner} ${d.notes}`.toLowerCase().includes(q));
+
+  const closed = state.donors.filter(d => d.stage === 'Closed');
+  const totalRaised = closed.reduce((s,d) => s + (parseFloat(d.amount)||0), 0);
+  const avg = state.donors.length ? Math.round(totalRaised / Math.max(closed.length,1)) : 0;
+
+  document.getElementById('d-total-raised').textContent = '$' + totalRaised.toLocaleString();
+  document.getElementById('d-total-donors').textContent = state.donors.length;
+  document.getElementById('d-avg-gift').textContent = '$' + avg.toLocaleString();
+
+  const goal = parseFloat(state.settings.goal) || 0;
+  if (goal > 0) {
+    const pct = Math.min(100, Math.round((totalRaised/goal)*100));
+    document.getElementById('donor-prog').style.width = pct + '%';
+    document.getElementById('donor-prog-label').textContent = `${pct}% of $${goal.toLocaleString()} goal`;
+  }
+
+  const tbody = document.getElementById('donors-tbody');
+  if (donors.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><h3>No donors found</h3><p>Add your first donor to get started.</p></div></td></tr>`;
+  } else {
+    tbody.innerHTML = donors.map(d => `
+      <tr>
+        <td><strong>${d.firstName} ${d.lastName}</strong>${d.employer ? `<div style="font-size:11px;color:var(--text-3)">${d.employer}</div>` : ''}</td>
+        <td>${stageBadge(d.stage)}</td>
+        <td style="font-family:'DM Mono',monospace">$${(parseFloat(d.amount)||0).toLocaleString()}</td>
+        <td>${d.type||'—'}</td>
+        <td>${d.lastContact||'—'}</td>
+        <td>${d.owner||'—'}</td>
+        <td style="max-width:180px;font-size:12px;color:var(--text-3)">${d.notes||'—'}</td>
+        <td>
+          <div style="display:flex;gap:4px">
+            <button class="btn btn-ghost btn-sm" onclick="editDonor('${d.id}')">Edit</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteRecord('donors','${d.id}')">Del</button>
+          </div>
+        </td>
+      </tr>`).join('');
+  }
+}
+
+function saveDonor() {
+  const id = document.getElementById('donor-edit-id').value;
+  const fname = document.getElementById('d-fname').value.trim();
+  const lname = document.getElementById('d-lname').value.trim();
+  if (!fname || !lname) { toast('First and last name are required'); return; }
+  const record = {
+    id: id || uid(),
+    firstName: fname, lastName: lname,
+    email: document.getElementById('d-email').value.trim(),
+    phone: document.getElementById('d-phone').value.trim(),
+    stage: document.getElementById('d-stage').value,
+    amount: document.getElementById('d-amount').value,
+    type: document.getElementById('d-type').value,
+    owner: document.getElementById('d-owner').value.trim(),
+    lastContact: document.getElementById('d-contact').value,
+    employer: document.getElementById('d-employer').value.trim(),
+    notes: document.getElementById('d-notes').value.trim(),
+    createdAt: id ? (state.donors.find(d=>d.id===id)?.createdAt || Date.now()) : Date.now()
+  };
+  if (id) { const i = state.donors.findIndex(d=>d.id===id); state.donors[i] = record; }
+  else { state.donors.unshift(record); logActivity(`${fname} ${lname} added as donor`, 'Donors'); }
+  save('donors'); updateBadges(); closeModal('add-donor'); renderDonors();
+  toast(id ? 'Donor updated' : 'Donor saved');
+}
+
+function editDonor(id) {
+  const d = state.donors.find(x=>x.id===id);
+  if (!d) return;
+  document.getElementById('donor-modal-title').textContent = 'Edit Donor';
+  document.getElementById('donor-edit-id').value = d.id;
+  document.getElementById('d-fname').value = d.firstName;
+  document.getElementById('d-lname').value = d.lastName;
+  document.getElementById('d-email').value = d.email||'';
+  document.getElementById('d-phone').value = d.phone||'';
+  document.getElementById('d-stage').value = d.stage;
+  document.getElementById('d-amount').value = d.amount||'';
+  document.getElementById('d-type').value = d.type||'Major';
+  document.getElementById('d-owner').value = d.owner||'';
+  document.getElementById('d-contact').value = d.lastContact||'';
+  document.getElementById('d-employer').value = d.employer||'';
+  document.getElementById('d-notes').value = d.notes||'';
+  openModal('add-donor');
+}
+
+// ══════════════════════════════════════════
+// VOLUNTEERS
+// ══════════════════════════════════════════
+function renderVolunteers() {
+  const q = (document.getElementById('vol-search')?.value || '').toLowerCase();
+  let vols = state.volunteers;
+  if (currentVolFilter !== 'all') vols = vols.filter(v => v.type === currentVolFilter);
+  if (q) vols = vols.filter(v => `${v.firstName} ${v.lastName} ${v.role} ${v.district} ${v.skills}`.toLowerCase().includes(q));
+
+  document.getElementById('v-total').textContent = state.volunteers.length;
+  document.getElementById('v-paid').textContent = state.volunteers.filter(v=>v.type==='Paid Staff').length;
+  document.getElementById('v-vol').textContent = state.volunteers.filter(v=>v.type==='Volunteer').length;
+
+  const tbody = document.getElementById('volunteers-tbody');
+  if (vols.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><h3>No people found</h3><p>Add your first volunteer or staff member.</p></div></td></tr>`;
+  } else {
+    tbody.innerHTML = vols.map(v => `
+      <tr>
+        <td>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="avatar" style="width:28px;height:28px;font-size:10px">${initials(v.firstName,v.lastName)}</div>
+            <strong>${v.firstName} ${v.lastName}</strong>
+          </div>
+        </td>
+        <td>${v.role||'—'}</td>
+        <td><span class="badge ${v.type==='Paid Staff'?'badge-gold':'badge-neutral'}">${v.type}</span></td>
+        <td>${v.district||'—'}</td>
+        <td>${v.availability||'—'}</td>
+        <td style="font-size:12px;color:var(--text-3)">${v.skills||'—'}</td>
+        <td>${statusBadge(v.status)}</td>
+        <td>
+          <div style="display:flex;gap:4px">
+            <button class="btn btn-ghost btn-sm" onclick="editVolunteer('${v.id}')">Edit</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteRecord('volunteers','${v.id}')">Del</button>
+          </div>
+        </td>
+      </tr>`).join('');
+  }
+}
+
+function saveVolunteer() {
+  const id = document.getElementById('vol-edit-id').value;
+  const fname = document.getElementById('v-fname').value.trim();
+  const lname = document.getElementById('v-lname').value.trim();
+  if (!fname || !lname) { toast('First and last name are required'); return; }
+  const record = {
+    id: id || uid(),
+    firstName: fname, lastName: lname,
+    role: document.getElementById('v-role').value.trim(),
+    type: document.getElementById('v-type').value,
+    district: document.getElementById('v-district').value.trim(),
+    availability: document.getElementById('v-availability').value,
+    email: document.getElementById('v-email').value.trim(),
+    phone: document.getElementById('v-phone').value.trim(),
+    skills: document.getElementById('v-skills').value.trim(),
+    status: document.getElementById('v-status').value,
+    createdAt: id ? (state.volunteers.find(v=>v.id===id)?.createdAt || Date.now()) : Date.now()
+  };
+  if (id) { const i = state.volunteers.findIndex(v=>v.id===id); state.volunteers[i] = record; }
+  else { state.volunteers.unshift(record); logActivity(`${fname} ${lname} added to roster`, 'Volunteers'); }
+  save('volunteers'); updateBadges(); closeModal('add-volunteer'); renderVolunteers();
+  toast(id ? 'Record updated' : 'Person saved');
+}
+
+function editVolunteer(id) {
+  const v = state.volunteers.find(x=>x.id===id);
+  if (!v) return;
+  document.getElementById('vol-modal-title').textContent = 'Edit Person';
+  document.getElementById('vol-edit-id').value = v.id;
+  document.getElementById('v-fname').value = v.firstName;
+  document.getElementById('v-lname').value = v.lastName;
+  document.getElementById('v-role').value = v.role||'';
+  document.getElementById('v-type').value = v.type||'Volunteer';
+  document.getElementById('v-district').value = v.district||'';
+  document.getElementById('v-availability').value = v.availability||'Flexible';
+  document.getElementById('v-email').value = v.email||'';
+  document.getElementById('v-phone').value = v.phone||'';
+  document.getElementById('v-skills').value = v.skills||'';
+  document.getElementById('v-status').value = v.status||'Active';
+  openModal('add-volunteer');
+}
+
+// ══════════════════════════════════════════
+// VOTERS
+// ══════════════════════════════════════════
+function renderVoters() {
+  const totalDoors = state.voters.reduce((s,v) => s + (parseInt(v.attempts)||0), 0);
+  const totalContacts = state.voters.reduce((s,v) => s + (parseInt(v.contacts)||0), 0);
+  document.getElementById('vt-doors').textContent = totalDoors.toLocaleString();
+  document.getElementById('vt-contacts').textContent = totalContacts.toLocaleString();
+  document.getElementById('vt-logs').textContent = state.voters.length;
+
+  // Region bars
+  const regions = {};
+  state.voters.forEach(v => {
+    if (!v.region) return;
+    if (!regions[v.region]) regions[v.region] = {attempts:0,contacts:0};
+    regions[v.region].attempts += parseInt(v.attempts)||0;
+    regions[v.region].contacts += parseInt(v.contacts)||0;
+  });
+  const rkeys = Object.keys(regions).sort((a,b) => regions[b].attempts - regions[a].attempts);
+  const regionEl = document.getElementById('region-bars');
+  if (rkeys.length === 0) {
+    regionEl.innerHTML = '<div class="empty-state"><p>No outreach logged yet.</p></div>';
+  } else {
+    const maxA = Math.max(...rkeys.map(r => regions[r].attempts), 1);
+    regionEl.innerHTML = rkeys.map(r => {
+      const pct = Math.round((regions[r].attempts / maxA) * 100);
+      const rate = regions[r].attempts ? Math.round((regions[r].contacts / regions[r].attempts)*100) : 0;
+      return `<div class="region-row">
+        <div class="region-name">${r}</div>
+        <div class="region-track"><div class="region-fill" style="width:${pct}%"></div></div>
+        <div class="region-pct">${regions[r].attempts.toLocaleString()}</div>
+        <div style="font-size:10px;color:var(--text-3);width:50px;text-align:right">${rate}% contact</div>
+      </div>`;
+    }).join('');
+  }
+
+  const tbody = document.getElementById('voters-tbody');
+  if (state.voters.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><h3>No outreach logged</h3><p>Log your first canvass or phone bank activity.</p></div></td></tr>`;
+  } else {
+    const sorted = [...state.voters].sort((a,b) => new Date(b.date) - new Date(a.date));
+    tbody.innerHTML = sorted.map(v => `
+      <tr>
+        <td>${v.date||'—'}</td>
+        <td><span class="badge badge-info">${v.type}</span></td>
+        <td>${v.region||'—'}</td>
+        <td>${v.lead||'—'}</td>
+        <td style="font-family:'DM Mono',monospace">${(parseInt(v.attempts)||0).toLocaleString()}</td>
+        <td style="font-family:'DM Mono',monospace">${(parseInt(v.contacts)||0).toLocaleString()}</td>
+        <td style="font-size:12px;color:var(--text-3);max-width:160px">${v.notes||'—'}</td>
+        <td>
+          <div style="display:flex;gap:4px">
+            <button class="btn btn-ghost btn-sm" onclick="editVoter('${v.id}')">Edit</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteRecord('voters','${v.id}')">Del</button>
+          </div>
+        </td>
+      </tr>`).join('');
+  }
+}
+
+function saveVoter() {
+  const id = document.getElementById('vt-edit-id').value;
+  const region = document.getElementById('vt-region').value.trim();
+  if (!region) { toast('Region is required'); return; }
+  const record = {
+    id: id || uid(),
+    type: document.getElementById('vt-type').value,
+    date: document.getElementById('vt-date').value,
+    region,
+    lead: document.getElementById('vt-lead').value.trim(),
+    attempts: document.getElementById('vt-attempts').value,
+    contacts: document.getElementById('vt-contacts').value,
+    notes: document.getElementById('vt-notes').value.trim(),
+    createdAt: id ? (state.voters.find(v=>v.id===id)?.createdAt || Date.now()) : Date.now()
+  };
+  if (id) { const i = state.voters.findIndex(v=>v.id===id); state.voters[i] = record; }
+  else { state.voters.unshift(record); logActivity(`Outreach log added for ${region}`, 'Voter Outreach'); }
+  save('voters'); updateBadges(); closeModal('add-voter'); renderVoters();
+  toast(id ? 'Log updated' : 'Outreach log saved');
+}
+
+function editVoter(id) {
+  const v = state.voters.find(x=>x.id===id);
+  if (!v) return;
+  document.getElementById('voter-modal-title').textContent = 'Edit Outreach Log';
+  document.getElementById('vt-edit-id').value = v.id;
+  document.getElementById('vt-type').value = v.type||'Canvass';
+  document.getElementById('vt-date').value = v.date||'';
+  document.getElementById('vt-region').value = v.region||'';
+  document.getElementById('vt-lead').value = v.lead||'';
+  document.getElementById('vt-attempts').value = v.attempts||'';
+  document.getElementById('vt-contacts').value = v.contacts||'';
+  document.getElementById('vt-notes').value = v.notes||'';
+  openModal('add-voter');
+}
+
+// ══════════════════════════════════════════
+// MEDIA
+// ══════════════════════════════════════════
+function renderMedia() {
+  let items = state.media;
+  if (currentMediaFilter !== 'all') items = items.filter(m => m.tone === currentMediaFilter);
+
+  document.getElementById('m-total').textContent = state.media.length;
+  document.getElementById('m-positive').textContent = state.media.filter(m=>m.tone==='Positive').length;
+  document.getElementById('m-open').textContent = state.media.filter(m=>m.tone==='Inquiry').length;
+
+  const el = document.getElementById('media-list');
+  if (items.length === 0) {
+    el.innerHTML = '<div class="empty-state"><h3>No media items</h3><p>Log your first press mention or inquiry.</p></div>';
+    return;
+  }
+
+  const typeIcons = {'Print / Online':'📰', TV:'📺', Radio:'🎙️', Podcast:'🎙️', Social:'📱', Inquiry:'⚠️'};
+  const sorted = [...items].sort((a,b) => new Date(b.date) - new Date(a.date));
+  el.innerHTML = sorted.map(m => `
+    <div class="media-card ${m.tone==='Inquiry'?'alert':''}">
+      <div class="media-icon">${typeIcons[m.type]||'📰'}</div>
+      <div style="flex:1;min-width:0">
+        <div class="media-headline">${m.title}</div>
+        <div class="media-outlet">${m.outlet}${m.date ? ' · ' + m.date : ''}</div>
+        <div class="media-tags">
+          ${toneBadge(m.tone)}
+          ${m.tags ? m.tags.split(',').map(t=>`<span class="badge badge-info">${t.trim()}</span>`).join('') : ''}
+          ${m.url ? `<a href="${m.url}" target="_blank" style="font-size:11px;color:var(--gold)">↗ Link</a>` : ''}
+        </div>
+        ${m.notes ? `<div style="font-size:12px;color:var(--text-3);margin-top:5px">${m.notes}</div>` : ''}
+      </div>
+      <div class="media-actions">
+        <button class="btn btn-ghost btn-sm" onclick="editMedia('${m.id}')">Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteRecord('media','${m.id}')">Del</button>
+      </div>
+    </div>`).join('');
+}
+
+function saveMedia() {
+  const id = document.getElementById('me-edit-id').value;
+  const title = document.getElementById('me-title').value.trim();
+  const outlet = document.getElementById('me-outlet').value.trim();
+  if (!title || !outlet) { toast('Title and outlet are required'); return; }
+  const record = {
+    id: id || uid(),
+    title, outlet,
+    date: document.getElementById('me-date').value,
+    type: document.getElementById('me-type').value,
+    tone: document.getElementById('me-tone').value,
+    tags: document.getElementById('me-tags').value.trim(),
+    url: document.getElementById('me-url').value.trim(),
+    notes: document.getElementById('me-notes').value.trim(),
+    createdAt: id ? (state.media.find(m=>m.id===id)?.createdAt || Date.now()) : Date.now()
+  };
+  if (id) { const i = state.media.findIndex(m=>m.id===id); state.media[i] = record; }
+  else { state.media.unshift(record); logActivity(`${outlet} — "${title.slice(0,40)}" logged`, 'Media'); }
+  save('media'); updateBadges(); closeModal('add-media'); renderMedia();
+  toast(id ? 'Item updated' : 'Coverage saved');
+}
+
+function editMedia(id) {
+  const m = state.media.find(x=>x.id===id);
+  if (!m) return;
+  document.getElementById('media-modal-title').textContent = 'Edit Coverage';
+  document.getElementById('me-edit-id').value = m.id;
+  document.getElementById('me-title').value = m.title;
+  document.getElementById('me-outlet').value = m.outlet;
+  document.getElementById('me-date').value = m.date||'';
+  document.getElementById('me-type').value = m.type||'Print / Online';
+  document.getElementById('me-tone').value = m.tone||'Neutral';
+  document.getElementById('me-tags').value = m.tags||'';
+  document.getElementById('me-url').value = m.url||'';
+  document.getElementById('me-notes').value = m.notes||'';
+  openModal('add-media');
+}
+
+// ══════════════════════════════════════════
+// EVENTS
+// ══════════════════════════════════════════
+function renderEvents() {
+  const tbody = document.getElementById('events-tbody');
+  if (state.events.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><h3>No events yet</h3><p>Add your first campaign event.</p></div></td></tr>`;
+    return;
+  }
+  const sorted = [...state.events].sort((a,b) => new Date(a.date) - new Date(b.date));
+  tbody.innerHTML = sorted.map(e => `
+    <tr>
+      <td><strong>${e.name}</strong></td>
+      <td>${e.date||'—'}${e.time ? ' ' + e.time : ''}</td>
+      <td>${e.location||'—'}</td>
+      <td><span class="badge badge-info">${e.type}</span></td>
+      <td>${evStatusBadge(e.status)}</td>
+      <td style="font-size:12px;color:var(--text-3);max-width:180px">${e.notes||'—'}</td>
+      <td>
+        <div style="display:flex;gap:4px">
+          <button class="btn btn-ghost btn-sm" onclick="editEvent('${e.id}')">Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteRecord('events','${e.id}')">Del</button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+function saveEvent() {
+  const id = document.getElementById('ev-edit-id').value;
+  const name = document.getElementById('ev-name').value.trim();
+  if (!name) { toast('Event name is required'); return; }
+  const record = {
+    id: id || uid(),
+    name,
+    date: document.getElementById('ev-date').value,
+    time: document.getElementById('ev-time').value,
+    type: document.getElementById('ev-type').value,
+    status: document.getElementById('ev-status').value,
+    location: document.getElementById('ev-location').value.trim(),
+    notes: document.getElementById('ev-notes').value.trim(),
+    createdAt: Date.now()
+  };
+  if (id) { const i = state.events.findIndex(e=>e.id===id); state.events[i] = record; }
+  else { state.events.push(record); logActivity(`Event added: ${name}`, 'Events'); }
+  save('events'); updateBadges(); closeModal('add-event'); renderEvents();
+  toast(id ? 'Event updated' : 'Event saved');
+}
+
+function editEvent(id) {
+  const e = state.events.find(x=>x.id===id);
+  if (!e) return;
+  document.getElementById('event-modal-title').textContent = 'Edit Event';
+  document.getElementById('ev-edit-id').value = e.id;
+  document.getElementById('ev-name').value = e.name;
+  document.getElementById('ev-date').value = e.date||'';
+  document.getElementById('ev-time').value = e.time||'';
+  document.getElementById('ev-type').value = e.type||'Fundraiser';
+  document.getElementById('ev-status').value = e.status||'Tentative';
+  document.getElementById('ev-location').value = e.location||'';
+  document.getElementById('ev-notes').value = e.notes||'';
+  openModal('add-event');
+}
+
+// ══════════════════════════════════════════
+// SETTINGS
+// ══════════════════════════════════════════
+function loadSettings() {
+  document.getElementById('set-candidate').value = state.settings.candidateName || '';
+  document.getElementById('set-state').value = state.settings.state || '';
+  document.getElementById('set-goal').value = state.settings.goal || '';
+  document.getElementById('set-election').value = state.settings.electionDate || '';
+  updateStorageInfo();
+}
+
+function saveSettings() {
+  state.settings.candidateName = document.getElementById('set-candidate').value.trim() || 'Governor 2026';
+  state.settings.state = document.getElementById('set-state').value.trim();
+  state.settings.goal = parseFloat(document.getElementById('set-goal').value) || 0;
+  state.settings.electionDate = document.getElementById('set-election').value;
+  save('settings');
+  document.getElementById('candidate-name').textContent = state.settings.candidateName;
+  toast('Settings saved');
+}
+
+function updateStorageInfo() {
+  let total = 0;
+  Object.values(KEYS).forEach(k => { total += (localStorage.getItem(k)||'').length; });
+  document.getElementById('storage-used').textContent = (total / 1024).toFixed(1) + ' KB';
+}
+
+// ══════════════════════════════════════════
+// DELETE
+// ══════════════════════════════════════════
+function deleteRecord(domain, id) {
+  if (!confirm('Delete this record? This cannot be undone.')) return;
+  state[domain] = state[domain].filter(r => r.id !== id);
+  save(domain); updateBadges();
+  renderSection(domain === 'voters' ? 'voters' : domain === 'volunteers' ? 'volunteers' : domain === 'media' ? 'media' : domain === 'events' ? 'events' : 'donors');
+  toast('Record deleted');
+}
+
+// ══════════════════════════════════════════
+// MODALS
+// ══════════════════════════════════════════
+function openModal(id) {
+  // Reset edit state on fresh open
+  if (id === 'add-donor') { document.getElementById('donor-modal-title').textContent = 'Add Donor'; document.getElementById('donor-edit-id').value = ''; clearForm(['d-fname','d-lname','d-email','d-phone','d-amount','d-owner','d-contact','d-employer','d-notes']); }
+  if (id === 'add-volunteer') { document.getElementById('vol-modal-title').textContent = 'Add Volunteer / Staff'; document.getElementById('vol-edit-id').value = ''; clearForm(['v-fname','v-lname','v-role','v-district','v-email','v-phone','v-skills']); }
+  if (id === 'add-voter') { document.getElementById('voter-modal-title').textContent = 'Log Outreach Activity'; document.getElementById('vt-edit-id').value = ''; clearForm(['vt-region','vt-lead','vt-attempts','vt-contacts','vt-notes']); document.getElementById('vt-date').value = new Date().toISOString().split('T')[0]; }
+  if (id === 'add-media') { document.getElementById('media-modal-title').textContent = 'Log Press Coverage'; document.getElementById('me-edit-id').value = ''; clearForm(['me-title','me-outlet','me-tags','me-url','me-notes']); document.getElementById('me-date').value = new Date().toISOString().split('T')[0]; }
+  if (id === 'add-event') { document.getElementById('event-modal-title').textContent = 'Add Event'; document.getElementById('ev-edit-id').value = ''; clearForm(['ev-name','ev-location','ev-notes']); }
+  document.getElementById('modal-' + id).classList.add('open');
+}
+
+function closeModal(id) { document.getElementById('modal-' + id).classList.remove('open'); }
+
+function clearForm(ids) { ids.forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; }); }
+
+// ══════════════════════════════════════════
+// EXPORT / IMPORT
+// ══════════════════════════════════════════
+function exportSection(domain) {
+  const data = state[domain];
+  if (!data || data.length === 0) { toast('No data to export'); return; }
+  const keys = Object.keys(data[0]).filter(k => k !== 'id' && k !== 'createdAt');
+  const csv = [keys.join(','), ...data.map(r => keys.map(k => `"${(r[k]||'').toString().replace(/"/g,'""')}"`).join(','))].join('\n');
+  download(`campaign_${domain}_${today()}.csv`, csv, 'text/csv');
+}
+
+function exportData() {
+  const all = ['donors','volunteers','voters','media','events'];
+  all.forEach(d => { if (state[d].length > 0) exportSection(d); });
+  toast('CSV exports downloaded');
+}
+
+function exportJSON() {
+  const json = JSON.stringify(state, null, 2);
+  download(`campaign_backup_${today()}.json`, json, 'application/json');
+  toast('JSON backup downloaded');
+}
+
+function importJSON() { document.getElementById('import-file').click(); }
+
+function handleImport(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const imported = JSON.parse(ev.target.result);
+      if (!confirm('This will replace all existing data. Continue?')) return;
+      ['donors','volunteers','voters','media','events','settings','activity'].forEach(k => {
+        if (imported[k]) state[k] = imported[k];
+      });
+      ['donors','volunteers','voters','media','events','settings','activity'].forEach(k => save(k));
+      updateBadges(); renderSection('dashboard'); navigate('dashboard');
+      toast('Data imported successfully');
+    } catch(err) { toast('Invalid JSON file'); }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+function confirmClear() {
+  if (!confirm('Delete ALL campaign data? This cannot be undone.')) return;
+  ['donors','volunteers','voters','media','events','activity'].forEach(k => { state[k] = []; save(k); });
+  updateBadges(); renderDashboard(); toast('All data cleared');
+}
+
+function download(name, content, type) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([content], {type}));
+  a.download = name; a.click();
+}
+
+function today() { return new Date().toISOString().split('T')[0]; }
+
+// ══════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════
+function initials(f, l) { return ((f||'')[0]||'') + ((l||'')[0]||''); }
+
+function stageBadge(stage) {
+  const map = { Prospect:'badge-neutral', Cultivating:'badge-info', 'Ask Made':'badge-warning', Closed:'badge-success' };
+  return `<span class="badge ${map[stage]||'badge-neutral'}">${stage}</span>`;
+}
+
+function statusBadge(status) {
+  const map = { Active:'badge-success', Onboarding:'badge-info', 'On leave':'badge-warning', Inactive:'badge-neutral' };
+  return `<span class="badge ${map[status]||'badge-neutral'}">${status||'Active'}</span>`;
+}
+
+function toneBadge(tone) {
+  const map = { Positive:'badge-success', Neutral:'badge-neutral', Mixed:'badge-warning', Negative:'badge-danger', Inquiry:'badge-warning' };
+  return `<span class="badge ${map[tone]||'badge-neutral'}">${tone}</span>`;
+}
+
+function evStatusBadge(status) {
+  const map = { Confirmed:'badge-success', Planning:'badge-warning', Tentative:'badge-neutral', Completed:'badge-info', Cancelled:'badge-danger' };
+  return `<span class="badge ${map[status]||'badge-neutral'}">${status}</span>`;
+}
+
+function timeAgo(iso) {
+  const diff = Date.now() - new Date(iso).getTime();
+  const mins = Math.floor(diff/60000);
+  if (mins < 1) return 'just now';
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins/60);
+  if (hrs < 24) return `${hrs}h ago`;
+  return `${Math.floor(hrs/24)}d ago`;
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2200);
+}
+
+// ══════════════════════════════════════════
+// TABS
+// ══════════════════════════════════════════
+document.querySelectorAll('.tab[data-tab]').forEach(tab => {
+  tab.addEventListener('click', function() {
+    const group = this.dataset.tab;
+    const filter = this.dataset.filter;
+    this.closest('.tabs').querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    this.classList.add('active');
+    if (group === 'donors') { currentDonorFilter = filter; renderDonors(); }
+    if (group === 'volunteers') { currentVolFilter = filter; renderVolunteers(); }
+    if (group === 'media') { currentMediaFilter = filter; renderMedia(); }
+  });
+});
+
+// ══════════════════════════════════════════
+// NAV EVENTS
+// ══════════════════════════════════════════
+document.querySelectorAll('.nav-item[data-section]').forEach(item => {
+  item.addEventListener('click', () => navigate(item.dataset.section));
+});
+
+// Close modal on overlay click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) overlay.classList.remove('open');
+  });
+});
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+load();
+document.getElementById('candidate-name').textContent = state.settings.candidateName || 'Governor 2026';
+updateBadges();
+renderDashboard();
+</script>
+</body>
+</html>
