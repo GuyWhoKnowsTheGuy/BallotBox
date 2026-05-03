@@ -610,6 +610,10 @@ textarea.form-control { resize: vertical; min-height: 72px; }
 
     <div class="nav-group">
       <div class="nav-group-label">Operations</div>
+      <div class="nav-item" data-section="social">
+        <span class="nav-icon">📊</span> Social Analytics
+        <span class="nav-badge" id="badge-social">0</span>
+      </div>
       <div class="nav-item" data-section="events">
         <span class="nav-icon">◷</span> Events
         <span class="nav-badge" id="badge-events">0</span>
@@ -878,6 +882,95 @@ textarea.form-control { resize: vertical; min-height: 72px; }
       </div>
 
       <!-- ══ SETTINGS ══ -->
+      <!-- ══ SOCIAL ANALYTICS ══ -->
+      <div class="section" id="section-social">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Social Analytics</div>
+            <div class="page-desc">Tuesday session with Mike — weekly metrics &amp; Meme Warrior output</div>
+          </div>
+          <div class="page-actions">
+            <button class="btn btn-outline" onclick="openModal('manage-warriors')">Manage Warriors</button>
+            <button class="btn btn-gold" onclick="openModal('add-week')">+ Log This Week</button>
+          </div>
+        </div>
+
+        <!-- Funnel KPIs -->
+        <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px">
+          <div class="kpi-card">
+            <div class="kpi-label">YouTube Subscribers</div>
+            <div class="kpi-value" id="soc-subs">—</div>
+            <div class="kpi-trend neutral" id="soc-subs-trend">no data yet</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Livestream Views (last wk)</div>
+            <div class="kpi-value" id="soc-live">—</div>
+            <div class="kpi-trend neutral" id="soc-live-trend">no data yet</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Shorts Views (last wk)</div>
+            <div class="kpi-value" id="soc-shorts">—</div>
+            <div class="kpi-trend neutral" id="soc-shorts-trend">no data yet</div>
+          </div>
+        </div>
+
+        <!-- Funnel visualization -->
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-title">Content Funnel — Awareness → Engagement → Conversion</div>
+          <div id="funnel-viz" style="display:flex;gap:0;align-items:stretch;min-height:80px">
+            <div style="flex:1;background:var(--info-bg);border-radius:8px 0 0 8px;padding:14px 16px;border:1px solid var(--border)">
+              <div style="font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--info);margin-bottom:4px">Awareness</div>
+              <div style="font-size:12px;color:var(--text-2)">Shorts + Memes</div>
+              <div style="font-family:'DM Mono',monospace;font-size:20px;font-weight:500;color:var(--navy);margin-top:6px" id="funnel-awareness">—</div>
+              <div style="font-size:10px;color:var(--text-3);margin-top:2px">views this week</div>
+            </div>
+            <div style="display:flex;align-items:center;padding:0 6px;color:var(--text-3);font-size:18px">→</div>
+            <div style="flex:1;background:var(--warning-bg);border-radius:0;padding:14px 16px;border:1px solid var(--border);border-left:none">
+              <div style="font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--warning);margin-bottom:4px">Engagement</div>
+              <div style="font-size:12px;color:var(--text-2)">Livestream Views</div>
+              <div style="font-family:'DM Mono',monospace;font-size:20px;font-weight:500;color:var(--navy);margin-top:6px" id="funnel-engagement">—</div>
+              <div style="font-size:10px;color:var(--text-3);margin-top:2px">views this week</div>
+            </div>
+            <div style="display:flex;align-items:center;padding:0 6px;color:var(--text-3);font-size:18px">→</div>
+            <div style="flex:1;background:var(--success-bg);border-radius:0 8px 8px 0;padding:14px 16px;border:1px solid var(--border);border-left:none">
+              <div style="font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--success);margin-bottom:4px">Conversion</div>
+              <div style="font-size:12px;color:var(--text-2)">Volunteer / Donate / Vote</div>
+              <div style="font-family:'DM Mono',monospace;font-size:20px;font-weight:500;color:var(--navy);margin-top:6px" id="funnel-conversion">—</div>
+              <div style="font-size:10px;color:var(--text-3);margin-top:2px">new subs vs target</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="two-col" style="margin-bottom:16px">
+          <!-- Week over week trend -->
+          <div class="card">
+            <div class="card-title">Week-over-Week Trends</div>
+            <div id="trend-table">
+              <div class="empty-state"><p>Log at least two weeks to see trends.</p></div>
+            </div>
+          </div>
+
+          <!-- Meme Warrior leaderboard -->
+          <div class="card">
+            <div class="card-title">Meme Warrior Output <span class="card-link" onclick="openModal('manage-warriors')">Manage roster →</span></div>
+            <div id="warrior-leaderboard">
+              <div class="empty-state"><p>Add Meme Warriors and log weekly output to see the leaderboard.</p></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Weekly log history -->
+        <div class="card" style="padding:0;overflow:hidden">
+          <div style="padding:14px 18px 10px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-2)">Weekly Session Log</div>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Week Ending</th><th>YT Subscribers</th><th>Sub Growth</th><th>vs Target</th><th>Livestream Views</th><th>Shorts Views</th><th>FB Reach</th><th>Memes Posted</th><th>Notes</th><th></th></tr></thead>
+              <tbody id="social-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
       <div class="section" id="section-settings">
         <div class="page-header">
           <div>
@@ -1104,18 +1197,89 @@ textarea.form-control { resize: vertical; min-height: 72px; }
   </div>
 </div>
 
+<!-- Add Weekly Social Log -->
+<div class="modal-overlay" id="modal-add-week">
+  <div class="modal" style="max-width:600px">
+    <div class="modal-header">
+      <div class="modal-title" id="week-modal-title">Log This Week's Metrics</div>
+      <button class="modal-close" onclick="closeModal('add-week')">×</button>
+    </div>
+    <input type="hidden" id="wk-edit-id">
+
+    <div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:10px">📅 Session Info</div>
+    <div class="form-grid">
+      <div class="form-group"><div class="form-label">Week Ending Date *</div><input class="form-control" id="wk-date" type="date"></div>
+      <div class="form-group"><div class="form-label">Logged By</div><input class="form-control" id="wk-logger" placeholder="e.g. Mike"></div>
+    </div>
+
+    <div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-3);margin:14px 0 10px">📺 YouTube Metrics</div>
+    <div class="form-grid">
+      <div class="form-group"><div class="form-label">Total Subscribers *</div><input class="form-control" id="wk-subs" type="number" placeholder="e.g. 4820" min="0"></div>
+      <div class="form-group"><div class="form-label">Livestream Views</div><input class="form-control" id="wk-live" type="number" placeholder="e.g. 1240" min="0"></div>
+      <div class="form-group"><div class="form-label">Shorts Views</div><input class="form-control" id="wk-shorts" type="number" placeholder="e.g. 8500" min="0"></div>
+      <div class="form-group"><div class="form-label">Weekly Sub Growth Target</div><input class="form-control" id="wk-sub-target" type="number" placeholder="e.g. 200" min="0"></div>
+    </div>
+
+    <div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-3);margin:14px 0 10px">📘 Facebook Metrics</div>
+    <div class="form-grid">
+      <div class="form-group"><div class="form-label">Total Reach</div><input class="form-control" id="wk-fb-reach" type="number" placeholder="e.g. 12400" min="0"></div>
+      <div class="form-group"><div class="form-label">Engagement (likes/comments/shares)</div><input class="form-control" id="wk-fb-engage" type="number" placeholder="e.g. 340" min="0"></div>
+    </div>
+
+    <div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-3);margin:14px 0 10px">⚔️ Meme Warrior Output This Week</div>
+    <div id="warrior-inputs" style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px">
+      <div style="font-size:12px;color:var(--text-3)">Add Meme Warriors in the roster first, then log their output here each week.</div>
+    </div>
+
+    <div class="form-group"><div class="form-label">Session Notes</div><textarea class="form-control" id="wk-notes" placeholder="Key takeaways from Tuesday session with Mike, focus areas, decisions made…"></textarea></div>
+    <div class="form-group"><div class="form-label">On Track?</div>
+      <select class="form-control" id="wk-status">
+        <option value="on-track">✅ On Track</option>
+        <option value="needs-focus">⚠️ Needs Focus</option>
+        <option value="behind">🔴 Behind</option>
+      </select>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('add-week')">Cancel</button>
+      <button class="btn btn-gold" onclick="saveWeek()">Save Week</button>
+    </div>
+  </div>
+</div>
+
+<!-- Manage Meme Warriors -->
+<div class="modal-overlay" id="modal-manage-warriors">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-header">
+      <div class="modal-title">Meme Warrior Roster</div>
+      <button class="modal-close" onclick="closeModal('manage-warriors')">×</button>
+    </div>
+    <p style="font-size:12px;color:var(--text-3);margin-bottom:14px">Add your Discord Meme Warriors. Their names will appear in weekly log forms so you can track output per person.</p>
+    <div id="warrior-roster-list" style="margin-bottom:14px"></div>
+    <div style="display:flex;gap:8px">
+      <input class="form-control" id="new-warrior-name" placeholder="Warrior name or Discord handle" style="flex:1">
+      <button class="btn btn-gold" onclick="addWarrior()">Add</button>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-gold" onclick="closeModal('manage-warriors');renderSocial()">Done</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script>
 // ══════════════════════════════════════════
 // STATE
 // ══════════════════════════════════════════
-const KEYS = { donors:'cio_donors', volunteers:'cio_volunteers', voters:'cio_voters', media:'cio_media', events:'cio_events', settings:'cio_settings', activity:'cio_activity' };
+const KEYS = { donors:'cio_donors', volunteers:'cio_volunteers', voters:'cio_voters', media:'cio_media', events:'cio_events', settings:'cio_settings', activity:'cio_activity', socialWeeks:'cio_social_weeks', warriors:'cio_warriors' };
 
 let state = {
   donors: [], volunteers: [], voters: [], media: [], events: [],
   settings: { candidateName:'Governor 2026', state:'', goal:0, electionDate:'' },
-  activity: []
+  activity: [],
+  socialWeeks: [],
+  warriors: []
 };
 
 let currentDonorFilter = 'all';
@@ -1152,6 +1316,7 @@ const PAGE_META = {
   volunteers: ['Volunteers & Staff', 'Roster, roles, and field team management'],
   voters: ['Voter Outreach & Canvassing', 'Regional coverage and contact tracking'],
   media: ['Media & Communications', 'Press tracker and coverage log'],
+  social: ['Social Analytics', 'Tuesday session with Mike — weekly metrics & Meme Warrior output'],
   events: ['Events', 'Rallies, fundraisers, and campaign appearances'],
   settings: ['Settings', 'Campaign configuration and data management']
 };
@@ -1173,6 +1338,7 @@ function renderSection(s) {
   if (s === 'volunteers') renderVolunteers();
   if (s === 'voters') renderVoters();
   if (s === 'media') renderMedia();
+  if (s === 'social') renderSocial();
   if (s === 'events') renderEvents();
   if (s === 'settings') loadSettings();
 }
@@ -1186,6 +1352,7 @@ function updateBadges() {
   document.getElementById('badge-voters').textContent = state.voters.length;
   document.getElementById('badge-media').textContent = state.media.length;
   document.getElementById('badge-events').textContent = state.events.length;
+  document.getElementById('badge-social').textContent = state.socialWeeks.length;
 }
 
 // ══════════════════════════════════════════
@@ -1835,6 +2002,369 @@ function toast(msg) {
   const el = document.getElementById('toast');
   el.textContent = msg; el.classList.add('show');
   setTimeout(() => el.classList.remove('show'), 2200);
+}
+
+// ══════════════════════════════════════════
+// SOCIAL ANALYTICS
+// ══════════════════════════════════════════
+
+function renderSocial() {
+  const weeks = [...state.socialWeeks].sort((a,b) => new Date(b.date) - new Date(a.date));
+  const latest = weeks[0];
+  const prev   = weeks[1];
+
+  // ── KPI cards ──
+  if (latest) {
+    const subs = parseInt(latest.subs) || 0;
+    const prevSubs = prev ? (parseInt(prev.subs) || 0) : null;
+    const subGrowth = prevSubs !== null ? subs - prevSubs : null;
+    const target = parseInt(latest.subTarget) || (state.settings.subGrowthTarget ? parseInt(state.settings.subGrowthTarget) : 0);
+
+    document.getElementById('soc-subs').textContent = subs.toLocaleString();
+    if (subGrowth !== null) {
+      const sign = subGrowth >= 0 ? '+' : '';
+      const cls  = subGrowth >= 0 ? '' : 'down';
+      document.getElementById('soc-subs-trend').textContent = `${sign}${subGrowth.toLocaleString()} vs last week`;
+      document.getElementById('soc-subs-trend').className = 'kpi-trend ' + cls;
+    } else {
+      document.getElementById('soc-subs-trend').textContent = 'first week logged';
+      document.getElementById('soc-subs-trend').className = 'kpi-trend neutral';
+    }
+
+    const live = parseInt(latest.liveViews) || 0;
+    const prevLive = prev ? (parseInt(prev.liveViews) || 0) : null;
+    document.getElementById('soc-live').textContent = live.toLocaleString();
+    if (prevLive !== null) {
+      const diff = live - prevLive;
+      const sign = diff >= 0 ? '+' : '';
+      document.getElementById('soc-live-trend').textContent = `${sign}${diff.toLocaleString()} vs last week`;
+      document.getElementById('soc-live-trend').className = 'kpi-trend ' + (diff >= 0 ? '' : 'down');
+    } else {
+      document.getElementById('soc-live-trend').textContent = 'first week logged';
+      document.getElementById('soc-live-trend').className = 'kpi-trend neutral';
+    }
+
+    const shorts = parseInt(latest.shortsViews) || 0;
+    const prevShorts = prev ? (parseInt(prev.shortsViews) || 0) : null;
+    document.getElementById('soc-shorts').textContent = shorts.toLocaleString();
+    if (prevShorts !== null) {
+      const diff = shorts - prevShorts;
+      const sign = diff >= 0 ? '+' : '';
+      document.getElementById('soc-shorts-trend').textContent = `${sign}${diff.toLocaleString()} vs last week`;
+      document.getElementById('soc-shorts-trend').className = 'kpi-trend ' + (diff >= 0 ? '' : 'down');
+    } else {
+      document.getElementById('soc-shorts-trend').textContent = 'first week logged';
+      document.getElementById('soc-shorts-trend').className = 'kpi-trend neutral';
+    }
+
+    // ── Funnel ──
+    const awareness = shorts + (parseInt(latest.fbReach) || 0);
+    document.getElementById('funnel-awareness').textContent = awareness.toLocaleString();
+    document.getElementById('funnel-engagement').textContent = live.toLocaleString();
+    const convLabel = subGrowth !== null
+      ? `${subGrowth >= 0 ? '+' : ''}${subGrowth.toLocaleString()} subs${target ? ' (target: ' + target.toLocaleString() + ')' : ''}`
+      : (subs.toLocaleString() + ' total');
+    document.getElementById('funnel-conversion').textContent = convLabel;
+
+  } else {
+    ['soc-subs','soc-live','soc-shorts'].forEach(id => document.getElementById(id).textContent = '—');
+    ['soc-subs-trend','soc-live-trend','soc-shorts-trend'].forEach(id => {
+      document.getElementById(id).textContent = 'no data yet';
+      document.getElementById(id).className = 'kpi-trend neutral';
+    });
+    ['funnel-awareness','funnel-engagement','funnel-conversion'].forEach(id => document.getElementById(id).textContent = '—');
+  }
+
+  // ── Week-over-week trend table ──
+  const trendEl = document.getElementById('trend-table');
+  if (weeks.length < 2) {
+    trendEl.innerHTML = '<div class="empty-state"><p>Log at least two weeks to see trends.</p></div>';
+  } else {
+    const display = weeks.slice(0, 6);
+    trendEl.innerHTML = '<table><thead><tr><th>Week</th><th>Subscribers</th><th>Sub Δ</th><th>vs Target</th><th>Livestream</th><th>Shorts</th><th>Status</th></tr></thead><tbody>' +
+      display.map((w, i) => {
+        const nextW = weeks[i + 1];
+        const subs  = parseInt(w.subs) || 0;
+        const prevS = nextW ? (parseInt(nextW.subs) || 0) : null;
+        const growth = prevS !== null ? subs - prevS : null;
+        const tgt    = parseInt(w.subTarget) || 0;
+        const growthStr = growth !== null ? `<span style="color:${growth>=0?'var(--success)':'var(--danger)'}">${growth>=0?'+':''}${growth.toLocaleString()}</span>` : '—';
+        const vsTarget  = (growth !== null && tgt > 0)
+          ? `<span style="color:${growth>=tgt?'var(--success)':'var(--danger)'}">${growth>=tgt?'✅':'⚠️'} ${tgt.toLocaleString()}</span>`
+          : (tgt > 0 ? `<span style="color:var(--text-3)">— / ${tgt.toLocaleString()}</span>` : '—');
+        const statusMap = { 'on-track':'badge-success', 'needs-focus':'badge-warning', 'behind':'badge-danger' };
+        const statusLabel = { 'on-track':'On Track', 'needs-focus':'Needs Focus', 'behind':'Behind' };
+        return `<tr>
+          <td style="white-space:nowrap">${w.date}</td>
+          <td style="font-family:'DM Mono',monospace">${subs.toLocaleString()}</td>
+          <td>${growthStr}</td>
+          <td>${vsTarget}</td>
+          <td style="font-family:'DM Mono',monospace">${(parseInt(w.liveViews)||0).toLocaleString()}</td>
+          <td style="font-family:'DM Mono',monospace">${(parseInt(w.shortsViews)||0).toLocaleString()}</td>
+          <td><span class="badge ${statusMap[w.status]||'badge-neutral'}">${statusLabel[w.status]||w.status||'—'}</span></td>
+        </tr>`;
+      }).join('') + '</tbody></table>';
+  }
+
+  // ── Meme Warrior leaderboard ──
+  const wbEl = document.getElementById('warrior-leaderboard');
+  if (state.warriors.length === 0) {
+    wbEl.innerHTML = '<div class="empty-state"><p>Add Meme Warriors via "Manage Warriors" to start tracking output.</p></div>';
+  } else {
+    // Tally meme counts across all weeks
+    const counts = {};
+    state.warriors.forEach(w => { counts[w.id] = 0; });
+    state.socialWeeks.forEach(week => {
+      if (!week.warriorOutput) return;
+      Object.entries(week.warriorOutput).forEach(([wid, cnt]) => {
+        if (counts[wid] !== undefined) counts[wid] += parseInt(cnt) || 0;
+      });
+    });
+    // Last-week counts
+    const lastCounts = {};
+    if (latest && latest.warriorOutput) {
+      Object.entries(latest.warriorOutput).forEach(([wid, cnt]) => { lastCounts[wid] = parseInt(cnt) || 0; });
+    }
+    const sorted = [...state.warriors].sort((a,b) => (counts[b.id]||0) - (counts[a.id]||0));
+    const maxCount = Math.max(...sorted.map(w => counts[w.id] || 0), 1);
+
+    wbEl.innerHTML = sorted.map((w, i) => {
+      const total = counts[w.id] || 0;
+      const lastWk = lastCounts[w.id] || 0;
+      const pct = Math.round((total / maxCount) * 100);
+      const medals = ['🥇','🥈','🥉'];
+      return `<div style="margin-bottom:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+          <div style="display:flex;align-items:center;gap:7px">
+            <span style="font-size:14px">${medals[i]||'⚔️'}</span>
+            <span style="font-size:13px;font-weight:500;color:var(--navy)">${w.name}</span>
+            ${w.discord ? `<span style="font-size:10px;color:var(--text-3)">${w.discord}</span>` : ''}
+          </div>
+          <div style="text-align:right">
+            <span style="font-family:'DM Mono',monospace;font-size:13px;font-weight:500;color:var(--navy)">${total}</span>
+            <span style="font-size:10px;color:var(--text-3)"> total</span>
+            ${lastWk > 0 ? `<span style="font-size:10px;color:var(--gold);margin-left:6px">+${lastWk} this wk</span>` : ''}
+          </div>
+        </div>
+        <div class="prog"><div class="prog-fill" style="width:${pct}%"></div></div>
+      </div>`;
+    }).join('');
+  }
+
+  // ── Weekly session log table ──
+  const tbody = document.getElementById('social-tbody');
+  if (weeks.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="10"><div class="empty-state"><h3>No weeks logged yet</h3><p>Click "+ Log This Week" to enter your first Tuesday session.</p></div></td></tr>`;
+  } else {
+    tbody.innerHTML = weeks.map((w, i) => {
+      const nextW = weeks[i + 1];
+      const subs = parseInt(w.subs) || 0;
+      const prevSubs = nextW ? (parseInt(nextW.subs) || 0) : null;
+      const growth = prevSubs !== null ? subs - prevSubs : null;
+      const tgt = parseInt(w.subTarget) || 0;
+      const totalMemes = w.warriorOutput
+        ? Object.values(w.warriorOutput).reduce((s,v) => s + (parseInt(v)||0), 0)
+        : 0;
+      const statusMap = { 'on-track':'badge-success', 'needs-focus':'badge-warning', 'behind':'badge-danger' };
+      const statusLabel = { 'on-track':'On Track', 'needs-focus':'Needs Focus', 'behind':'Behind' };
+      const growthStr = growth !== null
+        ? `<span style="color:${growth>=0?'var(--success)':'var(--danger)'}">${growth>=0?'+':''}${growth.toLocaleString()}</span>`
+        : '—';
+      const vsTarget = (growth !== null && tgt > 0)
+        ? `<span style="color:${growth>=tgt?'var(--success)':'var(--danger)'}">${growth>=tgt?'✅':'⚠️'} ${tgt.toLocaleString()}</span>`
+        : '—';
+      return `<tr>
+        <td style="white-space:nowrap"><strong>${w.date}</strong>${w.logger?`<div style="font-size:11px;color:var(--text-3)">w/ ${w.logger}</div>`:''}</td>
+        <td style="font-family:'DM Mono',monospace">${subs.toLocaleString()}</td>
+        <td>${growthStr}</td>
+        <td>${vsTarget}</td>
+        <td style="font-family:'DM Mono',monospace">${(parseInt(w.liveViews)||0).toLocaleString()}</td>
+        <td style="font-family:'DM Mono',monospace">${(parseInt(w.shortsViews)||0).toLocaleString()}</td>
+        <td style="font-family:'DM Mono',monospace">${(parseInt(w.fbReach)||0).toLocaleString()}</td>
+        <td style="font-family:'DM Mono',monospace">${totalMemes}</td>
+        <td style="font-size:12px;color:var(--text-3);max-width:160px">${w.notes||'—'}</td>
+        <td>
+          <div style="display:flex;gap:4px">
+            <span class="badge ${statusMap[w.status]||'badge-neutral'}">${statusLabel[w.status]||'—'}</span>
+            <button class="btn btn-ghost btn-sm" onclick="editWeek('${w.id}')">Edit</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteRecord('socialWeeks','${w.id}')">Del</button>
+          </div>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+}
+
+// ── Save weekly log ──
+function saveWeek() {
+  const id = document.getElementById('wk-edit-id').value;
+  const date = document.getElementById('wk-date').value;
+  if (!date) { toast('Week ending date is required'); return; }
+
+  // Collect warrior output
+  const warriorOutput = {};
+  state.warriors.forEach(w => {
+    const el = document.getElementById('warrior-cnt-' + w.id);
+    if (el) warriorOutput[w.id] = parseInt(el.value) || 0;
+  });
+
+  const record = {
+    id: id || uid(),
+    date,
+    logger:      document.getElementById('wk-logger').value.trim(),
+    subs:        document.getElementById('wk-subs').value,
+    liveViews:   document.getElementById('wk-live').value,
+    shortsViews: document.getElementById('wk-shorts').value,
+    subTarget:   document.getElementById('wk-sub-target').value,
+    fbReach:     document.getElementById('wk-fb-reach').value,
+    fbEngage:    document.getElementById('wk-fb-engage').value,
+    notes:       document.getElementById('wk-notes').value.trim(),
+    status:      document.getElementById('wk-status').value,
+    warriorOutput,
+    createdAt: id ? (state.socialWeeks.find(w=>w.id===id)?.createdAt || Date.now()) : Date.now()
+  };
+
+  if (id) {
+    const i = state.socialWeeks.findIndex(w => w.id === id);
+    state.socialWeeks[i] = record;
+  } else {
+    state.socialWeeks.push(record);
+    logActivity(`Social metrics logged for week of ${date}`, 'Social');
+  }
+  save('socialWeeks');
+  updateBadges();
+  closeModal('add-week');
+  renderSocial();
+  toast(id ? 'Week updated' : 'Week saved');
+}
+
+function editWeek(id) {
+  const w = state.socialWeeks.find(x => x.id === id);
+  if (!w) return;
+  document.getElementById('week-modal-title').textContent = 'Edit Week';
+  document.getElementById('wk-edit-id').value = w.id;
+  document.getElementById('wk-date').value = w.date || '';
+  document.getElementById('wk-logger').value = w.logger || '';
+  document.getElementById('wk-subs').value = w.subs || '';
+  document.getElementById('wk-live').value = w.liveViews || '';
+  document.getElementById('wk-shorts').value = w.shortsViews || '';
+  document.getElementById('wk-sub-target').value = w.subTarget || '';
+  document.getElementById('wk-fb-reach').value = w.fbReach || '';
+  document.getElementById('wk-fb-engage').value = w.fbEngage || '';
+  document.getElementById('wk-notes').value = w.notes || '';
+  document.getElementById('wk-status').value = w.status || 'on-track';
+  populateWarriorInputs(w.warriorOutput || {});
+  openModal('add-week');
+}
+
+// ── Populate warrior output fields in the weekly modal ──
+function populateWarriorInputs(existing) {
+  const el = document.getElementById('warrior-inputs');
+  if (state.warriors.length === 0) {
+    el.innerHTML = '<div style="font-size:12px;color:var(--text-3)">Add Meme Warriors via "Manage Warriors" first, then log their output here each week.</div>';
+    return;
+  }
+  el.innerHTML = state.warriors.map(w => `
+    <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--cream);border-radius:7px;border:1px solid var(--border)">
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:500;color:var(--navy)">${w.name}</div>
+        ${w.discord ? `<div style="font-size:11px;color:var(--text-3)">${w.discord}</div>` : ''}
+      </div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <label style="font-size:11px;color:var(--text-3)">Memes posted</label>
+        <input id="warrior-cnt-${w.id}" type="number" min="0" value="${existing[w.id]||0}"
+          style="width:60px;padding:5px 8px;border:1px solid var(--border);border-radius:6px;font-family:'DM Mono',monospace;font-size:13px;text-align:center;outline:none">
+      </div>
+    </div>`).join('');
+}
+
+// ── Meme Warrior roster management ──
+function addWarrior() {
+  const nameEl = document.getElementById('new-warrior-name');
+  const name = nameEl.value.trim();
+  if (!name) { toast('Enter a name or Discord handle'); return; }
+  const isDiscord = name.startsWith('@') || name.includes('#');
+  const warrior = {
+    id: uid(),
+    name: isDiscord ? name : name,
+    discord: isDiscord ? name : '',
+    createdAt: Date.now()
+  };
+  state.warriors.push(warrior);
+  save('warriors');
+  nameEl.value = '';
+  renderWarriorRoster();
+  toast(`${name} added to the roster`);
+}
+
+function removeWarrior(id) {
+  if (!confirm('Remove this Meme Warrior from the roster?')) return;
+  state.warriors = state.warriors.filter(w => w.id !== id);
+  save('warriors');
+  renderWarriorRoster();
+  toast('Warrior removed');
+}
+
+function renderWarriorRoster() {
+  const el = document.getElementById('warrior-roster-list');
+  if (!el) return;
+  if (state.warriors.length === 0) {
+    el.innerHTML = '<div style="font-size:12px;color:var(--text-3);padding:8px 0">No warriors yet. Add them below.</div>';
+    return;
+  }
+  el.innerHTML = state.warriors.map(w => `
+    <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--cream);border-radius:7px;border:1px solid var(--border);margin-bottom:6px">
+      <span style="font-size:16px">⚔️</span>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:500;color:var(--navy)">${w.name}</div>
+        ${w.discord ? `<div style="font-size:11px;color:var(--text-3)">${w.discord}</div>` : ''}
+      </div>
+      <button class="btn btn-danger btn-sm" onclick="removeWarrior('${w.id}')">Remove</button>
+    </div>`).join('');
+}
+
+// Patch openModal to handle social modals
+const _origOpenModal = openModal;
+function openModal(id) {
+  if (id === 'add-week') {
+    const existing = document.getElementById('wk-edit-id').value ? {} : {};
+    if (!document.getElementById('wk-edit-id').value) {
+      // Fresh open — reset
+      document.getElementById('week-modal-title').textContent = 'Log This Week\'s Metrics';
+      document.getElementById('wk-edit-id').value = '';
+      ['wk-date','wk-logger','wk-subs','wk-live','wk-shorts','wk-sub-target','wk-fb-reach','wk-fb-engage','wk-notes'].forEach(i => { const el = document.getElementById(i); if(el) el.value = ''; });
+      document.getElementById('wk-date').value = new Date().toISOString().split('T')[0];
+      document.getElementById('wk-status').value = 'on-track';
+      populateWarriorInputs({});
+    }
+    document.getElementById('modal-add-week').classList.add('open');
+    return;
+  }
+  if (id === 'manage-warriors') {
+    renderWarriorRoster();
+    document.getElementById('modal-manage-warriors').classList.add('open');
+    return;
+  }
+  _origOpenModal(id);
+}
+
+// ── Patch deleteRecord to handle socialWeeks ──
+const _origDeleteRecord = deleteRecord;
+function deleteRecord(domain, id) {
+  if (domain === 'socialWeeks') {
+    if (!confirm('Delete this week\'s log? This cannot be undone.')) return;
+    state.socialWeeks = state.socialWeeks.filter(r => r.id !== id);
+    save('socialWeeks');
+    updateBadges();
+    renderSocial();
+    toast('Week deleted');
+    return;
+  }
+  if (domain === 'warriors') {
+    removeWarrior(id);
+    return;
+  }
+  _origDeleteRecord(domain, id);
 }
 
 // ══════════════════════════════════════════
